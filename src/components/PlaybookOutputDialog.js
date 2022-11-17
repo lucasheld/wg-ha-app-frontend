@@ -28,7 +28,7 @@ const PlaybookOutputDialog = (props) => {
             if (props.isOpen) {
                 getOutput();
                 intervalRef.interval = setInterval(getOutput, 1000);
-            } else {
+            } else if (intervalRef.interval) {
                 clearInterval(intervalRef.interval);
             }
         },

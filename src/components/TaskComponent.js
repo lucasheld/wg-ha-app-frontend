@@ -2,7 +2,9 @@ import React, {useState} from "react";
 import {
     CircularProgress,
     IconButton,
-    ListItem, ListItemButton,
+    List,
+    ListItem,
+    ListItemButton,
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
@@ -38,43 +40,47 @@ const TaskComponent = ({task}) => {
                 handleClose={closeDialog}
                 task={task}
             />
-            <ListItem
+            <List
                 disablePadding
-                key={`listitem-${task.id}`}
             >
-                <ListItemButton
-                    onClick={openDialog}
+                <ListItem
+                    disablePadding
+                    key={`listitem-${task.id}`}
                 >
-                    <ListItemIcon>
-                        {
-                            taskSucceeded ?
-                                <Done/> :
-                                taskFailed ?
-                                    <ErrorOutline/> :
-                                    <CircularProgress size={24}/>
-                        }
-                    </ListItemIcon>
-                    <ListItemText
-                        id={`label-${task.id}`}
-                        primary={task.name}
-                        secondary={task.parsedDatetime()}
-                    />
-                    <ListItemSecondaryAction>
-                        {
-                            taskRunning &&
-                            <Tooltip
-                                title="cancel task">
-                                <IconButton
-                                    aria-label="cancel task"
-                                    onClick={cancelTask}
-                                >
-                                    <Cancel/>
-                                </IconButton>
-                            </Tooltip>
-                        }
-                    </ListItemSecondaryAction>
-                </ListItemButton>
-            </ListItem>
+                    <ListItemButton
+                        onClick={openDialog}
+                    >
+                        <ListItemIcon>
+                            {
+                                taskSucceeded ?
+                                    <Done/> :
+                                    taskFailed ?
+                                        <ErrorOutline/> :
+                                        <CircularProgress size={24}/>
+                            }
+                        </ListItemIcon>
+                        <ListItemText
+                            id={`label-${task.id}`}
+                            primary={task.name}
+                            secondary={task.parsedDatetime()}
+                        />
+                        <ListItemSecondaryAction>
+                            {
+                                taskRunning &&
+                                <Tooltip
+                                    title="cancel task">
+                                    <IconButton
+                                        aria-label="cancel task"
+                                        onClick={cancelTask}
+                                    >
+                                        <Cancel/>
+                                    </IconButton>
+                                </Tooltip>
+                            }
+                        </ListItemSecondaryAction>
+                    </ListItemButton>
+                </ListItem>
+            </List>
         </React.Fragment>
     )
 }
