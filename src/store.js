@@ -1,6 +1,7 @@
 import create from "zustand";
 import Task from "./data-classes/Task";
 import FlowerApi from "./api/FlowerApi";
+import AnsibleApi from "./api/AnsibleApi";
 
 
 const parseTask = (rawTask) => {
@@ -42,6 +43,36 @@ export const useStoreTasks = create((set) => ({
                 set({
                     error: error,
                     tasks: [],
+                })
+            })
+            .finally(() => {
+                set({
+                    loaded: true,
+                })
+            })
+    }
+}));
+
+
+export const useStoreClients = create((set) => ({
+    clients: [],
+    error: "",
+    loaded: false,
+    loadClients: () => {
+        const url = `${AnsibleApi.baseUrl}/client`;
+        fetch(url)
+            .then(res => res.json())
+            .then(clients => {
+                set({
+                    clients: clients,
+                    error: "",
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+                set({
+                    error: error,
+                    clients: [],
                 })
             })
             .finally(() => {

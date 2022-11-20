@@ -13,6 +13,6 @@ const TitleComponent = (props) => {
             </Helmet>
         </HelmetProvider>
     );
-}
+};
 
 export default TitleComponent;

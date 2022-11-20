@@ -1,6 +1,6 @@
 import "./App.css";
 import TasksComponent from "./components/TasksComponent";
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import TitleComponent from "./components/TitleComponent";
 import {
     AppBar,
@@ -16,17 +16,53 @@ import {
     Toolbar,
     Typography
 } from "@mui/material";
-import {Memory, Person} from "@mui/icons-material";
+import {Devices, Memory, Person} from "@mui/icons-material";
 import UsersComponent from "./components/UsersComponent";
+import ClientsComponent from "./components/ClientsComponent";
+import {useStoreClients, useStoreTasks} from "./store";
 
 
 const App = (props) => {
     const [displayComponent, setDisplayComponent] = useState(<TasksComponent/>);
+    const intervalRef = useRef({
+        interval: null
+    });
+
+    const tasks = useStoreTasks((state) => state.tasks);
+    const loadTasks = useStoreTasks((state) => state.loadTasks);
+    const loadClients = useStoreClients((state) => state.loadClients);
+
+    const poll = () => {
+        loadTasks();
+        loadClients();
+    };
+
+    // componentWillUnmount
+    const val = useRef();
+    useEffect(
+        () => {
+            val.current = props;
+        },
+        [props]
+    );
+    useEffect(() => {
+        return () => {
+            if (intervalRef.interval) {
+                clearInterval(intervalRef.interval);
+            } else {
+                poll();
+                intervalRef.interval = setInterval(poll, 1000);
+            }
+        };
+    }, []);
 
     const countRunningTasks = () => {
-        // TODO
-        return 0
-    }
+        return tasks.filter(task => !(
+            task.state === "SUCCESS" ||
+            task.state === "FAILURE" ||
+            task.state === "REVOKED"
+        )).length;
+    };
 
     const drawerWidth = 240;
 
@@ -34,9 +70,9 @@ const App = (props) => {
         <React.Fragment>
             <TitleComponent title="frontend" count={countRunningTasks()}/>
 
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+            <Box sx={{display: "flex"}}>
+                <CssBaseline/>
+                <AppBar position="fixed" sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
                     <Toolbar>
                         <Typography variant="h6" noWrap component="div">
                             frontend
@@ -48,15 +84,15 @@ const App = (props) => {
                     sx={{
                         width: drawerWidth,
                         flexShrink: 0,
-                        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+                        [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: "border-box"},
                     }}
                 >
-                    <Toolbar />
-                    <Box sx={{ overflow: 'auto' }}>
+                    <Toolbar/>
+                    <Box sx={{overflow: "auto"}}>
                         <List>
                             <ListItem key="tasks" disablePadding>
                                 <ListItemButton
-                                    onClick={() => setDisplayComponent(<TasksComponent />)}
+                                    onClick={() => setDisplayComponent(<TasksComponent/>)}
                                 >
                                     <ListItemIcon>
                                         <Badge
@@ -69,9 +105,19 @@ const App = (props) => {
                                     <ListItemText primary="Tasks"/>
                                 </ListItemButton>
                             </ListItem>
+                            <ListItem key="clients" disablePadding>
+                                <ListItemButton
+                                    onClick={() => setDisplayComponent(<ClientsComponent/>)}
+                                >
+                                    <ListItemIcon>
+                                        <Devices/>
+                                    </ListItemIcon>
+                                    <ListItemText primary="Clients"/>
+                                </ListItemButton>
+                            </ListItem>
                             <ListItem key="users" disablePadding>
                                 <ListItemButton
-                                    onClick={() => setDisplayComponent(<UsersComponent />)}
+                                    onClick={() => setDisplayComponent(<UsersComponent/>)}
                                 >
                                     <ListItemIcon>
                                         <Person/>
@@ -82,13 +128,13 @@ const App = (props) => {
                         </List>
                     </Box>
                 </Drawer>
-                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <Toolbar />
+                <Box component="main" sx={{flexGrow: 1, p: 3}}>
+                    <Toolbar/>
                     {displayComponent}
                 </Box>
             </Box>
         </React.Fragment>
-    )
+    );
 };
 
 export default App;

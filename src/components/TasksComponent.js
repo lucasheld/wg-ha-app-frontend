@@ -11,7 +11,7 @@ const TasksComponent = () => {
     const loaded = useStoreTasks((state) => state.loaded);
 
     useEffect(() => {
-        loadTasks()
+        loadTasks();
     }, []);
 
     return (
@@ -42,7 +42,7 @@ const TasksComponent = () => {
                         </Paper>
             }
         </div>
-    )
-}
+    );
+};
 
 export default TasksComponent;

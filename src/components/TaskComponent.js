@@ -82,7 +82,7 @@ const TaskComponent = ({task}) => {
                 </ListItem>
             </List>
         </React.Fragment>
-    )
-}
+    );
+};
 
 export default TaskComponent;

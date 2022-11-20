@@ -3,7 +3,7 @@ export default class FlowerApi {
 
     static cancelTask(taskId) {
         const requestOptions = {
-            method: 'POST'
+            method: "POST"
         };
         return fetch(`${this.baseUrl}/task/revoke/${taskId}?terminate=true`, requestOptions)
             .then(response => response.json());

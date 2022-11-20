@@ -3,13 +3,25 @@ export default class AnsibleApi {
 
     static runPlaybook(body) {
         const requestOptions = {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(body)
         };
         return fetch(`${this.baseUrl}/playbook`, requestOptions)
+            .then(response => response.json());
+    }
+
+    static addClient(body) {
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        };
+        return fetch(`${this.baseUrl}/client`, requestOptions)
             .then(response => response.json());
     }
 

@@ -71,7 +71,7 @@ const PlaybookOutputDialog = (props) => {
                     <br/>
                     {taskOutput && <br/>}
                 </DialogContentText>
-                <Typography component="span" variant="body1" style={{whiteSpace: 'pre-line'}}>
+                <Typography component="span" variant="body1" style={{whiteSpace: "pre-line"}}>
                     {taskOutput}
                 </Typography>
             </DialogContent>
@@ -81,7 +81,7 @@ const PlaybookOutputDialog = (props) => {
                 </Button>
             </DialogActions>
         </Dialog>
-    )
-}
+    );
+};
 
 export default PlaybookOutputDialog;
