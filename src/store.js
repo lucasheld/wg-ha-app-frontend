@@ -82,3 +82,12 @@ export const useStoreClients = create((set) => ({
             })
     }
 }));
+
+export const useStoreTags = create((set) => ({
+    tags: [],
+    error: "",
+    loaded: false,
+    loadTags: () => {
+        console.error("todo: implement")
+    }
+}));

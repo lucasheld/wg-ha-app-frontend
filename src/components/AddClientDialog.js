@@ -1,9 +1,10 @@
 import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
 import {useState} from "react";
+import SelectTagsComponent from "./SelectTagsComponent";
 
 const AddClientDialog = (props) => {
     const [publicKey, setPublicKey] = useState("");
-    // const [tags, setTags] = useState([]);
+    const [tags, setTags] = useState([]);
     // const [services, setServices] = useState([]);
 
     return (
@@ -26,13 +27,16 @@ const AddClientDialog = (props) => {
                     value={publicKey}
                     onChange={e => setPublicKey(e.target.value)}
                 />
-                {/*<SelectTagsComponent/>*/}
+                <SelectTagsComponent
+                    tags={tags}
+                    setTags={setTags}
+                />
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={() => props.handleOk(publicKey)} color="primary">
+                <Button onClick={() => props.handleOk(publicKey, tags)} color="primary">
                     Ok
                 </Button>
             </DialogActions>
