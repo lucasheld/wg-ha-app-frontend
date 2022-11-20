@@ -1,17 +1,18 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
+import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, TextField} from "@mui/material";
 import {useState} from "react";
-import SelectTagsComponent from "./SelectTagsComponent";
+import MultiChipInputComponent from "./MultiChipInputComponent";
+import SelectServicesComponent from "./SelectServicesComponent";
 
 const AddClientDialog = (props) => {
     const [publicKey, setPublicKey] = useState("");
     const [tags, setTags] = useState([]);
-    // const [services, setServices] = useState([]);
+    const [services, setServices] = useState([]);
 
     return (
         <Dialog
             open={true}
             onClose={props.handleClose}
-            fullWidth={true}
+            fullWidth
         >
             <DialogTitle id="alert-dialog-title">
                 Add Client
@@ -27,16 +28,25 @@ const AddClientDialog = (props) => {
                     value={publicKey}
                     onChange={e => setPublicKey(e.target.value)}
                 />
-                <SelectTagsComponent
-                    tags={tags}
-                    setTags={setTags}
+                <MultiChipInputComponent
+                    selected={tags}
+                    setSelected={setTags}
+                    id="tags"
+                    title="Tags"
+                />
+                <Box my={2}>
+                    <Divider/>
+                </Box>
+                <SelectServicesComponent
+                    services={services}
+                    setServices={setServices}
                 />
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={() => props.handleOk(publicKey, tags)} color="primary">
+                <Button onClick={() => props.handleOk(publicKey, tags, services)} color="primary">
                     Ok
                 </Button>
             </DialogActions>

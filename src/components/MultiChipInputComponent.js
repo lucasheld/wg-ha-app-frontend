@@ -1,44 +1,43 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete, {createFilterOptions} from "@mui/material/Autocomplete";
-import {useStoreTags} from "../store";
 
 const filter = createFilterOptions();
 
-const SelectTagsComponent = (props) => {
+const MultiChipInputComponent = (props) => {
     const [options, setOptions] = useState([]);
 
-    const tags = useStoreTags((state) => state.tags);
-
-    useEffect(() => {
-        setOptions(tags);
-    }, []);
-
-    useEffect(() => {
-        setOptions(tags)
-    }, [tags])
+    // const tags = useStoreTags((state) => state.tags);
+    //
+    // useEffect(() => {
+    //     setOptions(tags);
+    // }, []);
+    //
+    // useEffect(() => {
+    //     setOptions(tags)
+    // }, [tags])
 
     return (
         <Autocomplete
-            value={props.tags}
+            value={props.selected}
             multiple
             onChange={(event, newValue, reason, details) => {
                 switch (reason) {
                     case "selectOption":
                     case "createOption":
                         if (details.option.create) {
-                            let valueList = props.tags;
+                            let valueList = props.selected;
                             valueList.push(details.option.name);
-                            props.setTags(valueList);
+                            props.setSelected(valueList);
                         } else {
-                            props.setTags(newValue);
+                            props.setSelected(newValue);
                         }
                         break;
                     case "removeOption":
-                        props.setTags(newValue);
+                        props.setSelected(newValue);
                         break;
                     case "clear":
-                        props.setTags([]);
+                        props.setSelected([]);
                         break;
                     default:
                         console.error("unknown reason: ", reason);
@@ -64,7 +63,7 @@ const SelectTagsComponent = (props) => {
             selectOnFocus
             clearOnBlur
             handleHomeEndKeys
-            id="tags"
+            id={props.id}
             options={options}
             getOptionLabel={(option) => {
                 // Value selected with enter, right from the input
@@ -84,11 +83,11 @@ const SelectTagsComponent = (props) => {
                 <TextField
                     {...params}
                     margin="dense"
-                    label="Tags"
+                    label={props.title}
                 />
             )}
         />
     );
 };
 
-export default SelectTagsComponent;
+export default MultiChipInputComponent;

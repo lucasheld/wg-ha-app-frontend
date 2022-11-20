@@ -51,7 +51,7 @@ const PlaybookOutputDialog = (props) => {
             open={props.isOpen}
             onClose={props.handleClose}
             scroll="paper"
-            fullWidth={true}
+            fullWidth
             maxWidth="md"
         >
             <DialogTitle id="scroll-dialog-title">Playbook output</DialogTitle>
