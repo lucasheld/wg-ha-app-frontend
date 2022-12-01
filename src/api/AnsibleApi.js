@@ -29,4 +29,10 @@ export default class AnsibleApi {
         return fetch(`${this.baseUrl}/playbook/${taskId}`)
             .then(response => response.json());
     }
+
+    static getWireGuardConfig(publicKey) {
+        console.log(encodeURIComponent(publicKey));
+        return fetch(`${this.baseUrl}/config/${encodeURIComponent(publicKey)}`)
+            .then(response => response.text());
+    }
 }

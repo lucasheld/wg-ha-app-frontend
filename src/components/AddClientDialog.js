@@ -4,7 +4,8 @@ import MultiChipInputComponent from "./MultiChipInputComponent";
 import SelectServicesComponent from "./SelectServicesComponent";
 
 const AddClientDialog = (props) => {
-    const [publicKey, setPublicKey] = useState("");
+    // const [publicKey, setPublicKey] = useState("");
+    const [privateKey, setPrivateKey] = useState("");
     const [tags, setTags] = useState([]);
     const [services, setServices] = useState([]);
 
@@ -18,15 +19,25 @@ const AddClientDialog = (props) => {
                 Add Client
             </DialogTitle>
             <DialogContent dividers>
+                {/*<TextField*/}
+                {/*    autoFocus*/}
+                {/*    margin="dense"*/}
+                {/*    id="publicKey"*/}
+                {/*    label="Public Key"*/}
+                {/*    type="text"*/}
+                {/*    fullWidth*/}
+                {/*    value={publicKey}*/}
+                {/*    onChange={e => setPublicKey(e.target.value)}*/}
+                {/*/>*/}
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="publicKey"
-                    label="Public Key"
+                    id="privateKey"
+                    label="Private Key"
                     type="text"
                     fullWidth
-                    value={publicKey}
-                    onChange={e => setPublicKey(e.target.value)}
+                    value={privateKey}
+                    onChange={e => setPrivateKey(e.target.value)}
                 />
                 <MultiChipInputComponent
                     selected={tags}
@@ -46,7 +57,7 @@ const AddClientDialog = (props) => {
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={() => props.handleOk(publicKey, tags, services)} color="primary">
+                <Button onClick={() => props.handleOk(privateKey, tags, services)} color="primary">
                     Ok
                 </Button>
             </DialogActions>

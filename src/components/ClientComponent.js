@@ -1,9 +1,26 @@
-import React from "react";
+import React, {useState} from "react";
 import {List, ListItem, ListItemButton, ListItemText} from "@mui/material";
+import WireGuardConfigDialog from "./WireGuardConfigDialog";
 
 const ClientComponent = (props) => {
+    const [dialogOpen, setDialogOpen] = useState(false);
+
+    const openDialog = () => {
+        console.log(props.client);
+        setDialogOpen(true);
+    };
+
+    const closeDialog = () => {
+        setDialogOpen(false);
+    };
+
     return (
         <React.Fragment>
+            <WireGuardConfigDialog
+                isOpen={dialogOpen}
+                handleClose={closeDialog}
+                client={props.client}
+            />
             <List
                 disablePadding
             >
@@ -12,9 +29,7 @@ const ClientComponent = (props) => {
                     key={`listitem-${props.client.public_key}`}
                 >
                     <ListItemButton
-                        onClick={() => {
-                            console.log(props.client);
-                        }}
+                        onClick={openDialog}
                     >
                         <ListItemText
                             id={`label-${props.client.public_key}`}
