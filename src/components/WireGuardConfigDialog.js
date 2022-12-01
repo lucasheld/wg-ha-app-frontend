@@ -1,17 +1,9 @@
 import React, {useEffect, useState} from "react";
 import AnsibleApi from "../api/AnsibleApi";
-import {
-    Button,
-    ButtonGroup,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle, Grid,
-    IconButton,
-    Typography
-} from "@mui/material";
-import {Cancel, QrCode, TextSnippet} from "@mui/icons-material";
+import {Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton} from "@mui/material";
+import {QrCode, TextSnippet} from "@mui/icons-material";
 import {QRCodeSVG} from "qrcode.react";
+import {atomOneLight, CopyBlock} from "react-code-blocks";
 
 const WireGuardConfigDialog = (props) => {
     const [wireGuardConfig, setWireGuardConfig] = useState("");
@@ -68,9 +60,13 @@ const WireGuardConfigDialog = (props) => {
                     <br/>
                     {
                         mode === "text" &&
-                        <Typography component="span" variant="body1" style={{whiteSpace: "pre-line"}}>
-                            {wireGuardConfig}
-                        </Typography>
+                        <CopyBlock
+                            text={wireGuardConfig}
+                            language="text"
+                            showLineNumbers={false}
+                            theme={atomOneLight}
+                            codeBlock
+                        />
                     }
                     {
                         mode === "qr" &&
