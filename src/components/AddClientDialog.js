@@ -2,18 +2,23 @@ import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider,
 import {useState} from "react";
 import MultiChipInputComponent from "./MultiChipInputComponent";
 import SelectServicesComponent from "./SelectServicesComponent";
+import {useStoreDialogs} from "../store";
 
-const AddClientDialog = (props) => {
+const AddClientDialog = () => {
     // const [publicKey, setPublicKey] = useState("");
     const [title, setTitle] = useState("");
     const [privateKey, setPrivateKey] = useState("");
     const [tags, setTags] = useState([]);
     const [services, setServices] = useState([]);
 
+    const open = useStoreDialogs((state) => state.open);
+    const props = useStoreDialogs((state) => state.props);
+    const closeDialog = useStoreDialogs((state) => state.closeDialog);
+
     return (
         <Dialog
-            open={true}
-            onClose={props.handleClose}
+            open={open}
+            onClose={closeDialog}
             fullWidth
         >
             <DialogTitle id="alert-dialog-title">
@@ -65,7 +70,7 @@ const AddClientDialog = (props) => {
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.handleClose} color="primary">
+                <Button onClick={closeDialog} color="primary">
                     Cancel
                 </Button>
                 <Button

@@ -1,5 +1,5 @@
 import {Box, Button, Divider, FormControl, Grid, IconButton, InputLabel, MenuItem, Select} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import MultiChipInputComponent from "./MultiChipInputComponent";
 import {Add, Delete} from "@mui/icons-material";
 

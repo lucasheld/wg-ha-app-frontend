@@ -39,7 +39,6 @@ export default class AnsibleApi {
     }
 
     static getWireGuardConfig(publicKey) {
-        console.log(encodeURIComponent(publicKey));
         return fetch(`${this.baseUrl}/config/${encodeURIComponent(publicKey)}`)
             .then(response => response.text());
     }

@@ -2,7 +2,7 @@ import create from "zustand";
 import Task from "./data-classes/Task";
 import FlowerApi from "./api/FlowerApi";
 import AnsibleApi from "./api/AnsibleApi";
-import {CONFIRMATION_DIALOG} from "./components/DialogsComponent";
+import {CLIENT_DIALOG, CONFIRMATION_DIALOG, WIREGUARD_CONFIG_DIALOG} from "./components/DialogsComponent";
 
 
 const parseTask = (rawTask) => {
@@ -104,9 +104,9 @@ export const useStoreDialogs = create((set, get) => ({
             props: props,
         })
     },
-    openConfirmationDialog: (props) => {
-        get().openDialog(CONFIRMATION_DIALOG, props)
-    },
+    openConfirmationDialog: (props) => get().openDialog(CONFIRMATION_DIALOG, props),
+    openClientDialog: (props) => get().openDialog(CLIENT_DIALOG, props),
+    openWireGuardConfigDialog: (props) => get().openDialog(WIREGUARD_CONFIG_DIALOG, props),
     closeDialog: () => {
         set({
             open: false,

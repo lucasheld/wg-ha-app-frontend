@@ -14,18 +14,23 @@ import {
 import {Download, QrCode, TextSnippet} from "@mui/icons-material";
 import {QRCodeSVG} from "qrcode.react";
 import {atomOneLight, CopyBlock} from "react-code-blocks";
+import {useStoreDialogs} from "../store";
 
-const WireGuardConfigDialog = (props) => {
+const WireGuardConfigDialog = () => {
     const [wireGuardConfig, setWireGuardConfig] = useState("");
     const [mode, setMode] = useState("text");  // text, qr
 
+    const open = useStoreDialogs((state) => state.open);
+    const props = useStoreDialogs((state) => state.props);
+    const closeDialog = useStoreDialogs((state) => state.closeDialog);
+
     useEffect(
         () => {
-            if (props.isOpen) {
+            if (open) {
                 getOutput();
             }
         },
-        [props.isOpen]
+        [open]
     );
 
     const getOutput = () => {
@@ -41,8 +46,8 @@ const WireGuardConfigDialog = (props) => {
     return (
         <React.Fragment>
             <Dialog
-                open={props.isOpen}
-                onClose={props.handleClose}
+                open={open}
+                onClose={closeDialog}
                 scroll="paper"
                 fullWidth
                 maxWidth="md"
@@ -104,7 +109,7 @@ const WireGuardConfigDialog = (props) => {
                     }
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={props.handleClose} color="primary">
+                    <Button onClick={closeDialog} color="primary">
                         Close
                     </Button>
                 </DialogActions>

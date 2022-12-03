@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {Alert, Fab, List, Paper, Tooltip} from "@mui/material";
 import {Add} from "@mui/icons-material";
 import AnsibleApi from "../api/AnsibleApi";
-import AddClientDialog from "./AddClientDialog";
-import {useStoreClients} from "../store";
+import {useStoreClients, useStoreDialogs} from "../store";
 import ClientComponent from "./ClientComponent";
 
 const ClientsComponent = () => {
-    const [dialogOpen, setDialogOpen] = useState(false);
+    const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
 
     const loadClients = useStoreClients((state) => state.loadClients);
 
@@ -20,8 +19,6 @@ const ClientsComponent = () => {
     }, []);
 
     const handleDialogOk = async (title, privateKey, tags, services) => {
-        setDialogOpen(false);
-
         await AnsibleApi.addClient({
             // "public_key": publicKey,
             "title": title,
@@ -33,14 +30,6 @@ const ClientsComponent = () => {
 
     return (
         <React.Fragment>
-            {
-                dialogOpen &&
-                <AddClientDialog
-                    handleClose={() => setDialogOpen(false)}
-                    handleOk={handleDialogOk}
-                />
-            }
-
             {
                 loaded &&
                 error ?
@@ -75,7 +64,11 @@ const ClientsComponent = () => {
                         bottom: (theme) => theme.spacing(2),
                         right: (theme) => theme.spacing(2)
                     }}
-                    onClick={() => setDialogOpen(true)}
+                    onClick={() => {
+                        openClientDialog({
+                            handleOk: handleDialogOk
+                        });
+                    }}
                 >
                     <Add/>
                 </Fab>

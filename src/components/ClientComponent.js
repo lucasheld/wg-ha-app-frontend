@@ -1,22 +1,15 @@
-import React, {useState} from "react";
+import React from "react";
 import {IconButton, List, ListItem, ListItemButton, ListItemText} from "@mui/material";
-import WireGuardConfigDialog from "./WireGuardConfigDialog";
 import {Delete, Edit} from "@mui/icons-material";
 import {useStoreDialogs} from "../store";
 import AnsibleApi from "../api/AnsibleApi";
 
 const ClientComponent = (props) => {
-    const [dialogOpen, setDialogOpen] = useState(false);
-
     const openConfirmationDialog = useStoreDialogs((state) => state.openConfirmationDialog);
+    const openWireGuardConfigDialog = useStoreDialogs((state) => state.openWireGuardConfigDialog);
 
     return (
         <React.Fragment>
-            <WireGuardConfigDialog
-                isOpen={dialogOpen}
-                handleClose={() => setDialogOpen(false)}
-                client={props.client}
-            />
             <List
                 disablePadding
             >
@@ -51,7 +44,11 @@ const ClientComponent = (props) => {
                     }
                 >
                     <ListItemButton
-                        onClick={() => setDialogOpen(true)}
+                        onClick={() => {
+                            openWireGuardConfigDialog({
+                                client: props.client
+                            })
+                        }}
                     >
                         <ListItemText
                             id={`label-${props.client.public_key}`}
