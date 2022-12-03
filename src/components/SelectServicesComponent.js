@@ -3,23 +3,7 @@ import React, {useEffect} from "react";
 import MultiChipInputComponent from "./MultiChipInputComponent";
 import {Add, Delete} from "@mui/icons-material";
 
-const SelectServicesComponent = ({services, setServices}) => {
-    useEffect(() => {
-        let newServices = services.map(service => ({
-            ...service,
-            rules: service.rules ?
-                service.rules.map(rule => ({
-                    ...rule,
-                    ports: rule.ports ?
-                        rule.ports.map(port => port.toString())
-                        : []
-                }))
-                : [],
-            allowed_tags: service.allowed_tags ? service.allowed_tags : []
-        }))
-        setServices(newServices);
-    }, []);
-
+const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value, id, title}, ref) => {
     const generateNewRule = () => {
         return {
             "protocol": "",
@@ -40,7 +24,7 @@ const SelectServicesComponent = ({services, setServices}) => {
     return (
         <React.Fragment>
             {
-                services.map((service, serviceIndex) =>
+                value.map((service, serviceIndex) =>
                     <Box
                         key={`${serviceIndex}-div`}
                     >
@@ -77,7 +61,7 @@ const SelectServicesComponent = ({services, setServices}) => {
                                                     onChange={e => {
                                                         let protocol = e.target.value;
                                                         let displayPortsNew = ["tcp", "udp"].includes(rule.protocol);
-                                                        let newServices = services.map(s => ({
+                                                        let newServices = value.map(s => ({
                                                             ...s,
                                                             rules: service === s ?
                                                                 s.rules.map(r => ({
@@ -91,7 +75,7 @@ const SelectServicesComponent = ({services, setServices}) => {
                                                                 })) :
                                                                 s.rules
                                                         }))
-                                                        setServices(newServices);
+                                                        onChange(newServices);
                                                     }}
                                                 >
                                                     <MenuItem value="all">all</MenuItem>
@@ -111,9 +95,9 @@ const SelectServicesComponent = ({services, setServices}) => {
                                             displayPorts &&
                                             <Grid item xs={xsPorts}>
                                                 <MultiChipInputComponent
-                                                    selected={rule.ports}
-                                                    setSelected={ports => {
-                                                        let newServices = services.map(s => ({
+                                                    value={rule.ports}
+                                                    onChange={ports => {
+                                                        let newServices = value.map(s => ({
                                                             ...s,
                                                             rules: service === s ?
                                                                 s.rules.map(r => ({
@@ -124,7 +108,7 @@ const SelectServicesComponent = ({services, setServices}) => {
                                                                 })) :
                                                                 s.rules
                                                         }))
-                                                        setServices(newServices);
+                                                        onChange(newServices);
                                                     }}
                                                     id={`${serviceIndex}${ruleIndex}-ports`}
                                                     title="Ports"
@@ -140,13 +124,13 @@ const SelectServicesComponent = ({services, setServices}) => {
                                                         color="error"
                                                         aria-label="delete"
                                                         onClick={() => {
-                                                            let newServices = services.map(s => ({
+                                                            let newServices = value.map(s => ({
                                                                 ...s,
                                                                 rules: service === s ?
                                                                     s.rules.filter(item => item !== rule) :
                                                                     s.rules
                                                             }))
-                                                            setServices(newServices);
+                                                            onChange(newServices);
                                                         }}
                                                     >
                                                         <Delete/>
@@ -162,11 +146,11 @@ const SelectServicesComponent = ({services, setServices}) => {
                             <Button
                                 onClick={() => {
                                     let rule = generateNewRule();
-                                    let newServices = services.map(s => ({
+                                    let newServices = value.map(s => ({
                                         ...s,
                                         rules: service === s ? [...s.rules, rule]: s.rules
                                     }))
-                                    setServices(newServices);
+                                    onChange(newServices);
                                 }}
                                 variant="outlined"
                                 startIcon={<Add/>}
@@ -176,13 +160,13 @@ const SelectServicesComponent = ({services, setServices}) => {
                         </Box>
                         <Box mt={1}>
                             <MultiChipInputComponent
-                                selected={service.allowed_tags}
-                                setSelected={allowed_tags => {
-                                    let newServices = services.map(s => ({
+                                value={service.allowed_tags}
+                                onChange={allowed_tags => {
+                                    let newServices = value.map(s => ({
                                         ...s,
                                         allowed_tags: service === s ? allowed_tags: s.allowed_tags
                                     }))
-                                    setServices(newServices);
+                                    onChange(newServices);
                                 }}
                                 id={`${serviceIndex}-allowedTags`}
                                 title="Allowed tags"
@@ -193,8 +177,8 @@ const SelectServicesComponent = ({services, setServices}) => {
                             <Grid container justifyContent="flex-end">
                                 <Button
                                     onClick={() => {
-                                        let newServices = services.filter(item => item !== service);
-                                        setServices(newServices);
+                                        let newServices = value.filter(item => item !== service);
+                                        onChange(newServices);
                                     }}
                                     variant="outlined"
                                     color="error"
@@ -214,8 +198,8 @@ const SelectServicesComponent = ({services, setServices}) => {
                 <Button
                     onClick={() => {
                         let service = generateNewService();
-                        let newServices = [...services, service]
-                        setServices(newServices);
+                        let newServices = [...value, service]
+                        onChange(newServices);
                     }}
                     variant="outlined"
                     startIcon={<Add/>}
@@ -226,6 +210,6 @@ const SelectServicesComponent = ({services, setServices}) => {
         </React.Fragment>
 
     )
-}
+});
 
 export default SelectServicesComponent;

@@ -25,6 +25,18 @@ export default class AnsibleApi {
             .then(response => response.json());
     }
 
+    static editClient(body) {
+        const requestOptions = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(body)
+        };
+        return fetch(`${this.baseUrl}/client`, requestOptions)
+            .then(response => response.json());
+    }
+
     static deleteClient(publicKey) {
         const requestOptions = {
             method: "DELETE"

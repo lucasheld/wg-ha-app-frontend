@@ -4,7 +4,7 @@ import Autocomplete, {createFilterOptions} from "@mui/material/Autocomplete";
 
 const filter = createFilterOptions();
 
-const MultiChipInputComponent = (props) => {
+const MultiChipInputComponent = React.forwardRef(({ onChange, name, label, value, id, title}, ref) => {
     const [options, setOptions] = useState([]);
 
     // const tags = useStoreTags((state) => state.tags);
@@ -19,25 +19,25 @@ const MultiChipInputComponent = (props) => {
 
     return (
         <Autocomplete
-            value={props.selected}
+            value={value}
             multiple
             onChange={(event, newValue, reason, details) => {
                 switch (reason) {
                     case "selectOption":
                     case "createOption":
                         if (details.option.create) {
-                            let valueList = props.selected;
+                            let valueList = value;
                             valueList.push(details.option.name);
-                            props.setSelected(valueList);
+                            onChange(valueList);
                         } else {
-                            props.setSelected(newValue);
+                            onChange(newValue);
                         }
                         break;
                     case "removeOption":
-                        props.setSelected(newValue);
+                        onChange(newValue);
                         break;
                     case "clear":
-                        props.setSelected([]);
+                        onChange([]);
                         break;
                     default:
                         console.error("unknown reason: ", reason);
@@ -63,7 +63,7 @@ const MultiChipInputComponent = (props) => {
             selectOnFocus
             clearOnBlur
             handleHomeEndKeys
-            id={props.id}
+            id={id}
             options={options}
             getOptionLabel={(option) => {
                 // Value selected with enter, right from the input
@@ -83,11 +83,11 @@ const MultiChipInputComponent = (props) => {
                 <TextField
                     {...params}
                     margin="dense"
-                    label={props.title}
+                    label={title}
                 />
             )}
         />
     );
-};
+});
 
 export default MultiChipInputComponent;

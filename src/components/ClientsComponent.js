@@ -18,16 +18,6 @@ const ClientsComponent = () => {
         loadClients();
     }, []);
 
-    const handleDialogOk = async (title, privateKey, tags, services) => {
-        await AnsibleApi.addClient({
-            // "public_key": publicKey,
-            "title": title,
-            "private_key": privateKey,
-            "tags": tags,
-            "services": services
-        });
-    };
-
     return (
         <React.Fragment>
             {
@@ -66,7 +56,9 @@ const ClientsComponent = () => {
                     }}
                     onClick={() => {
                         openClientDialog({
-                            handleOk: handleDialogOk
+                            handleOk: async (body) => {
+                                await AnsibleApi.addClient(body);
+                            }
                         });
                     }}
                 >

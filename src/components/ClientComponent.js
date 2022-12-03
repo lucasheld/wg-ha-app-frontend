@@ -5,6 +5,7 @@ import {useStoreDialogs} from "../store";
 import AnsibleApi from "../api/AnsibleApi";
 
 const ClientComponent = (props) => {
+    const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
     const openConfirmationDialog = useStoreDialogs((state) => state.openConfirmationDialog);
     const openWireGuardConfigDialog = useStoreDialogs((state) => state.openWireGuardConfigDialog);
 
@@ -22,7 +23,12 @@ const ClientComponent = (props) => {
                                 edge="end"
                                 aria-label="edit"
                                 onClick={() => {
-                                    console.log("edit");
+                                    openClientDialog({
+                                        client: props.client,
+                                        handleOk: async (body) => {
+                                            await AnsibleApi.editClient(body);
+                                        }
+                                    });
                                 }}
                             >
                                 <Edit/>
