@@ -1,7 +1,17 @@
 import React, {useEffect, useState} from "react";
 import AnsibleApi from "../api/AnsibleApi";
-import {Button, ButtonGroup, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton} from "@mui/material";
-import {QrCode, TextSnippet} from "@mui/icons-material";
+import {
+    Box,
+    Button,
+    ButtonGroup,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Grid,
+    IconButton
+} from "@mui/material";
+import {Download, QrCode, TextSnippet} from "@mui/icons-material";
 import {QRCodeSVG} from "qrcode.react";
 import {atomOneLight, CopyBlock} from "react-code-blocks";
 
@@ -37,7 +47,9 @@ const WireGuardConfigDialog = (props) => {
                 fullWidth
                 maxWidth="md"
             >
-                <DialogTitle id="scroll-dialog-title">WireGuard Config</DialogTitle>
+                <DialogTitle id="scroll-dialog-title">
+                    WireGuard Config: {props.client.title}
+                </DialogTitle>
                 <DialogContent dividers>
                     <Grid container>
                         <ButtonGroup variant="contained" aria-label="switch mode">
@@ -60,13 +72,31 @@ const WireGuardConfigDialog = (props) => {
                     <br/>
                     {
                         mode === "text" &&
-                        <CopyBlock
-                            text={wireGuardConfig}
-                            language="text"
-                            showLineNumbers={false}
-                            theme={atomOneLight}
-                            codeBlock
-                        />
+                        <React.Fragment>
+                            <CopyBlock
+                                text={wireGuardConfig}
+                                language="text"
+                                showLineNumbers={false}
+                                theme={atomOneLight}
+                                codeBlock
+                            />
+                            <Box mt={1}>
+                                <Button
+                                    aria-label="download"
+                                    variant="contained"
+                                    startIcon={<Download/>}
+                                    onClick={() => {
+                                        const file = new Blob([wireGuardConfig], {type: 'text/plain'});
+                                        const element = document.createElement("a");
+                                        element.href = URL.createObjectURL(file);
+                                        element.download = "wg0.conf";
+                                        document.body.appendChild(element);
+                                        element.click();
+                                        element.parentNode.removeChild(element);
+                                    }}
+                                >Download</Button>
+                            </Box>
+                        </React.Fragment>
                     }
                     {
                         mode === "qr" &&

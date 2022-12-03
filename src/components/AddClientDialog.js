@@ -5,6 +5,7 @@ import SelectServicesComponent from "./SelectServicesComponent";
 
 const AddClientDialog = (props) => {
     // const [publicKey, setPublicKey] = useState("");
+    const [title, setTitle] = useState("");
     const [privateKey, setPrivateKey] = useState("");
     const [tags, setTags] = useState([]);
     const [services, setServices] = useState([]);
@@ -29,6 +30,16 @@ const AddClientDialog = (props) => {
                 {/*    value={publicKey}*/}
                 {/*    onChange={e => setPublicKey(e.target.value)}*/}
                 {/*/>*/}
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="title"
+                    label="Title"
+                    type="text"
+                    fullWidth
+                    value={title}
+                    onChange={e => setTitle(e.target.value)}
+                />
                 <TextField
                     autoFocus
                     margin="dense"
@@ -57,7 +68,12 @@ const AddClientDialog = (props) => {
                 <Button onClick={props.handleClose} color="primary">
                     Cancel
                 </Button>
-                <Button onClick={() => props.handleOk(privateKey, tags, services)} color="primary">
+                <Button
+                    color="primary"
+                    onClick={() => {
+                        props.handleOk(title, privateKey, tags, services)
+                    }}
+                >
                     Ok
                 </Button>
             </DialogActions>

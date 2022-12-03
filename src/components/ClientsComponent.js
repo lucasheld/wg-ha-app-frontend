@@ -19,11 +19,12 @@ const ClientsComponent = () => {
         loadClients();
     }, []);
 
-    const handleDialogOk = async (privateKey, tags, services) => {
+    const handleDialogOk = async (title, privateKey, tags, services) => {
         setDialogOpen(false);
 
         await AnsibleApi.addClient({
             // "public_key": publicKey,
+            "title": title,
             "private_key": privateKey,
             "tags": tags,
             "services": services

@@ -33,7 +33,7 @@ const ClientComponent = (props) => {
                     >
                         <ListItemText
                             id={`label-${props.client.public_key}`}
-                            primary={props.client.public_key}
+                            primary={props.client.title}
                         />
                     </ListItemButton>
                 </ListItem>
