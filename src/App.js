@@ -20,6 +20,7 @@ import {Devices, Memory, Person} from "@mui/icons-material";
 import UsersComponent from "./components/UsersComponent";
 import ClientsComponent from "./components/ClientsComponent";
 import {useStoreClients, useStoreTasks} from "./store";
+import DialogsComponent from "./components/DialogsComponent";
 
 
 const App = (props) => {
@@ -69,6 +70,7 @@ const App = (props) => {
     return (
         <React.Fragment>
             <TitleComponent title="frontend" count={countRunningTasks()}/>
+            <DialogsComponent/>
 
             <Box sx={{display: "flex"}}>
                 <CssBaseline/>

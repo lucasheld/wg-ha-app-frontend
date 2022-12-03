@@ -2,6 +2,7 @@ import create from "zustand";
 import Task from "./data-classes/Task";
 import FlowerApi from "./api/FlowerApi";
 import AnsibleApi from "./api/AnsibleApi";
+import {CONFIRMATION_DIALOG} from "./components/DialogsComponent";
 
 
 const parseTask = (rawTask) => {
@@ -89,5 +90,27 @@ export const useStoreTags = create((set) => ({
     loaded: false,
     loadTags: () => {
         console.error("todo: implement")
+    }
+}));
+
+export const useStoreDialogs = create((set, get) => ({
+    open: false,
+    type: null,
+    props: {},
+    openDialog: (type, props) => {
+        set({
+            open: true,
+            type: type,
+            props: props,
+        })
+    },
+    openConfirmationDialog: (props) => {
+        get().openDialog(CONFIRMATION_DIALOG, props)
+    },
+    closeDialog: () => {
+        set({
+            open: false,
+            type: null,
+        })
     }
 }));

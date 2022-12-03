@@ -25,6 +25,14 @@ export default class AnsibleApi {
             .then(response => response.json());
     }
 
+    static deleteClient(publicKey) {
+        const requestOptions = {
+            method: "DELETE"
+        };
+        return fetch(`${this.baseUrl}/client/${encodeURIComponent(publicKey)}`, requestOptions)
+            .then(response => response.json());
+    }
+
     static getPlaybookOutput(taskId) {
         return fetch(`${this.baseUrl}/playbook/${taskId}`)
             .then(response => response.json());
