@@ -34,7 +34,7 @@ const WireGuardConfigDialog = () => {
     );
 
     const getOutput = () => {
-        AnsibleApi.getWireGuardConfig(props.client.public_key)
+        AnsibleApi.getWireGuardConfig(props.client.id)
             .then(response => {
                 setWireGuardConfig(response);
             })

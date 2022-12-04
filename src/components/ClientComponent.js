@@ -26,7 +26,7 @@ const ClientComponent = (props) => {
                                     openClientDialog({
                                         client: props.client,
                                         handleOk: async (body) => {
-                                            await AnsibleApi.editClient(body);
+                                            await AnsibleApi.editClient(props.client.id, body);
                                         }
                                     });
                                 }}
@@ -40,7 +40,7 @@ const ClientComponent = (props) => {
                                     openConfirmationDialog({
                                         title: "Delete client",
                                         content: `Are you sure you want to delete the client "${props.client.title}"?`,
-                                        handleOk: () => AnsibleApi.deleteClient(props.client.public_key)
+                                        handleOk: () => AnsibleApi.deleteClient(props.client.id)
                                     })
                                 }}
                             >
