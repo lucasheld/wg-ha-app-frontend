@@ -29,8 +29,7 @@ export default class AnsibleApi {
         const requestOptions = {
             method: "DELETE"
         };
-        return fetch(`${this.baseUrl}/client/${clientId}`, requestOptions)
-            .then(response => response.json());
+        return fetch(`${this.baseUrl}/client/${clientId}`, requestOptions);
     }
 
     static getPlaybookOutput(taskId) {

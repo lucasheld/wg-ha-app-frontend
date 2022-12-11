@@ -23,7 +23,7 @@ const ClientsComponent = () => {
                             {
                                 clients.map((client) =>
                                     <ClientComponent
-                                        key={client.public_key}
+                                        key={client.id}
                                         client={client}
                                     />
                                 )

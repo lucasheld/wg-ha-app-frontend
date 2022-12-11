@@ -16,7 +16,7 @@ const ClientComponent = (props) => {
             >
                 <ListItem
                     disablePadding
-                    key={`listitem-${props.client.public_key}`}
+                    key={`listitem-${props.client.id}`}
                     secondaryAction={
                         <React.Fragment>
                             <IconButton
@@ -57,7 +57,7 @@ const ClientComponent = (props) => {
                         }}
                     >
                         <ListItemText
-                            id={`label-${props.client.public_key}`}
+                            id={`label-${props.client.id}`}
                             primary={props.client.title}
                         />
                     </ListItemButton>

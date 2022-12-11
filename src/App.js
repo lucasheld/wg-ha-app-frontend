@@ -24,36 +24,14 @@ import DialogsComponent from "./components/DialogsComponent";
 import WebsocketComponent from "./components/WebsocketComponent";
 
 
-const App = (props) => {
+const App = () => {
     const [displayComponent, setDisplayComponent] = useState(<TasksComponent/>);
-    const intervalRef = useRef({
-        interval: null
-    });
 
     const tasks = useStoreTasks((state) => state.tasks);
     const loadTasks = useStoreTasks((state) => state.loadTasks);
 
-    const poll = () => {
-        loadTasks();
-    };
-
-    // componentWillUnmount
-    const val = useRef();
-    useEffect(
-        () => {
-            val.current = props;
-        },
-        [props]
-    );
     useEffect(() => {
-        return () => {
-            if (intervalRef.interval) {
-                clearInterval(intervalRef.interval);
-            } else {
-                poll();
-                intervalRef.interval = setInterval(poll, 1000);
-            }
-        };
+        loadTasks();
     }, []);
 
     const countRunningTasks = () => {
