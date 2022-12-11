@@ -16,9 +16,14 @@ import {QRCodeSVG} from "qrcode.react";
 import {atomOneLight, CopyBlock} from "react-code-blocks";
 import {useStoreDialogs} from "../store";
 
+const modeEnum = {
+    TEXT: "text",
+    QR: "qr"
+}
+
 const WireGuardConfigDialog = () => {
     const [wireGuardConfig, setWireGuardConfig] = useState("");
-    const [mode, setMode] = useState("text");  // text, qr
+    const [mode, setMode] = useState(modeEnum.TEXT);
 
     const open = useStoreDialogs((state) => state.open);
     const props = useStoreDialogs((state) => state.props);
@@ -60,15 +65,15 @@ const WireGuardConfigDialog = () => {
                         <ButtonGroup variant="contained" aria-label="switch mode">
                             <IconButton
                                 aria-label="text"
-                                onClick={() => setMode("text")}
-                                disabled={mode === "text"}
+                                onClick={() => setMode(modeEnum.TEXT)}
+                                disabled={mode === modeEnum.TEXT}
                             >
                                 <TextSnippet/>
                             </IconButton>
                             <IconButton
                                 aria-label="qr code"
-                                onClick={() => setMode("qr")}
-                                disabled={mode === "qr"}
+                                onClick={() => setMode(modeEnum.QR)}
+                                disabled={mode === modeEnum.QR}
                             >
                                 <QrCode/>
                             </IconButton>
@@ -76,7 +81,7 @@ const WireGuardConfigDialog = () => {
                     </Grid>
                     <br/>
                     {
-                        mode === "text" &&
+                        mode === modeEnum.TEXT &&
                         <React.Fragment>
                             <CopyBlock
                                 text={wireGuardConfig}
@@ -104,7 +109,7 @@ const WireGuardConfigDialog = () => {
                         </React.Fragment>
                     }
                     {
-                        mode === "qr" &&
+                        mode === modeEnum.QR &&
                         <QRCodeSVG size="300" value={wireGuardConfig} />
                     }
                 </DialogContent>
