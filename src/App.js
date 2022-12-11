@@ -19,8 +19,9 @@ import {
 import {Devices, Memory, Person} from "@mui/icons-material";
 import UsersComponent from "./components/UsersComponent";
 import ClientsComponent from "./components/ClientsComponent";
-import {useStoreClients, useStoreTasks} from "./store";
+import {useStoreTasks} from "./store";
 import DialogsComponent from "./components/DialogsComponent";
+import WebsocketComponent from "./components/WebsocketComponent";
 
 
 const App = (props) => {
@@ -31,11 +32,9 @@ const App = (props) => {
 
     const tasks = useStoreTasks((state) => state.tasks);
     const loadTasks = useStoreTasks((state) => state.loadTasks);
-    const loadClients = useStoreClients((state) => state.loadClients);
 
     const poll = () => {
         loadTasks();
-        loadClients();
     };
 
     // componentWillUnmount
@@ -132,6 +131,7 @@ const App = (props) => {
                 </Drawer>
                 <Box component="main" sx={{flexGrow: 1, p: 3}}>
                     <Toolbar/>
+                    <WebsocketComponent/>
                     {displayComponent}
                 </Box>
             </Box>

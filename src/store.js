@@ -1,7 +1,6 @@
 import create from "zustand";
 import Task from "./data-classes/Task";
 import FlowerApi from "./api/FlowerApi";
-import AnsibleApi from "./api/AnsibleApi";
 import {CLIENT_DIALOG, CONFIRMATION_DIALOG, WIREGUARD_CONFIG_DIALOG} from "./components/DialogsComponent";
 
 
@@ -54,33 +53,27 @@ export const useStoreTasks = create((set) => ({
     }
 }));
 
-
-export const useStoreClients = create((set) => ({
+export const useStoreClients = create((set, get) => ({
     clients: [],
-    error: "",
-    loaded: false,
-    loadClients: () => {
-        const url = `${AnsibleApi.baseUrl}/client`;
-        fetch(url)
-            .then(res => res.json())
-            .then(clients => {
-                set({
-                    clients: clients,
-                    error: "",
-                })
-            })
-            .catch((error) => {
-                console.log(error);
-                set({
-                    error: error,
-                    clients: [],
-                })
-            })
-            .finally(() => {
-                set({
-                    loaded: true,
-                })
-            })
+    setClients: clients => {
+        set({
+            clients: clients
+        })
+    },
+    addClient: client => {
+        set({
+            clients: [...get().clients, client]
+        })
+    },
+    editClient: client => {
+        set({
+            clients: get().clients.map(c => c.id === client.id ? client : c)
+        })
+    },
+    deleteClient: clientId => {
+        set({
+            clients: get().clients.filter(c => c.id !== clientId)
+        })
     }
 }));
 
