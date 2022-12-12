@@ -13,6 +13,7 @@ const WebsocketComponent = () => {
     const deleteClient = useStoreClients((state) => state.deleteClient);
 
     const addOrEditTask = useStoreTasks((state) => state.addOrEditTask);
+    const editTaskOutput = useStoreTasks((state) => state.editTaskOutput);
 
     useEffect(() => {
         socket.on("connect", r => {
@@ -54,6 +55,10 @@ const WebsocketComponent = () => {
             })
         })
 
+        socket.on("task-progress", r => {
+            editTaskOutput(r);
+        })
+
         socket.onAny((event, data) => {
             console.log({event, data})
         })
@@ -75,6 +80,8 @@ const WebsocketComponent = () => {
             socket.off("task-rejected");
             socket.off("task-revoked");
             socket.off("task-retried");
+
+            socket.off("task-progress");
 
             socket.offAny();
         };

@@ -47,7 +47,10 @@ export const useStoreTasks = create((set, get) => ({
         let edited = false;
         get().tasks.forEach(t => {
             if (t.uuid === task.uuid) {
-                tasks.push(task)
+                tasks.push({
+                    ...task,
+                    output: t.output
+                })
                 edited = true;
             } else {
                 tasks.push(t);
@@ -61,6 +64,11 @@ export const useStoreTasks = create((set, get) => ({
             tasks: tasks
         })
     },
+    editTaskOutput: task => {
+        set({
+            tasks: get().tasks.map(t => t.uuid === task.uuid ? {...t, output: task.output} : t)
+        })
+    }
 }));
 
 export const useStoreClients = create((set, get) => ({

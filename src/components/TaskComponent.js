@@ -36,11 +36,14 @@ const TaskComponent = ({task}) => {
 
     return (
         <React.Fragment>
-            <PlaybookOutputDialog
-                isOpen={dialogOpen}
-                handleClose={closeDialog}
-                task={task}
-            />
+            {
+                dialogOpen &&
+                <PlaybookOutputDialog
+                    isOpen={dialogOpen}
+                    handleClose={closeDialog}
+                    task={task}
+                />
+            }
             <List
                 disablePadding
             >

@@ -1,51 +1,34 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect} from "react";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography} from "@mui/material";
 import AnsibleApi from "../api/AnsibleApi";
 import {parseTaskDatetime} from "../utils";
+import {useStoreTasks} from "../store";
 
 const PlaybookOutputDialog = (props) => {
-    const [taskOutput, setTaskOutput] = useState("");
-    const intervalRef = useRef({
-        interval: null
-    });
+    const tasks = useStoreTasks((state) => state.tasks);
+    const editTaskOutput = useStoreTasks((state) => state.editTaskOutput);
 
-    // componentWillUnmount
-    const val = useRef();
-    useEffect(
-        () => {
-            val.current = props;
-        },
-        [props]
-    );
+    const task = tasks.find(task => task.uuid === props.task.uuid);
+
     useEffect(() => {
-        return () => {
-            clearInterval(intervalRef.interval);
-        };
-    }, []);
+        if (props.isOpen) {
+            AnsibleApi.getPlaybookOutput(props.task.uuid)
+                .then(response => {
+                    let taskOutput = response.output;
 
-    // componentDidUpdate - isOpen
-    useEffect(
-        () => {
-            if (props.isOpen) {
-                getOutput();
-                intervalRef.interval = setInterval(getOutput, 1000);
-            } else if (intervalRef.interval) {
-                clearInterval(intervalRef.interval);
-            }
-        },
-        [props.isOpen]
-    );
-
-    const getOutput = () => {
-        AnsibleApi.getPlaybookOutput(props.task.uuid)
-            .then(response => {
-                let taskOutput = response.output;
-                setTaskOutput(taskOutput);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
+                    // set task output if not already updated by websocket events
+                    if (!task.output) {
+                        editTaskOutput({
+                            uuid: task.uuid,
+                            output: taskOutput
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [props.isOpen]);
 
     return (
         <Dialog
@@ -70,10 +53,10 @@ const PlaybookOutputDialog = (props) => {
                         State: {props.task.state}
                     </Typography>
                     <br/>
-                    {taskOutput && <br/>}
+                    {task.output && <br/>}
                 </DialogContentText>
                 <Typography component="span" variant="body1" style={{whiteSpace: "pre-line"}}>
-                    {taskOutput}
+                    {task.output || ""}
                 </Typography>
             </DialogContent>
             <DialogActions>
