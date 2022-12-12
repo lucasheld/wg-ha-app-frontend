@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "react";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography} from "@mui/material";
 import AnsibleApi from "../api/AnsibleApi";
+import {parseTaskDatetime} from "../utils";
 
 const PlaybookOutputDialog = (props) => {
     const [taskOutput, setTaskOutput] = useState("");
@@ -36,7 +37,7 @@ const PlaybookOutputDialog = (props) => {
     );
 
     const getOutput = () => {
-        AnsibleApi.getPlaybookOutput(props.task.id)
+        AnsibleApi.getPlaybookOutput(props.task.uuid)
             .then(response => {
                 let taskOutput = response.output;
                 setTaskOutput(taskOutput);
@@ -58,11 +59,11 @@ const PlaybookOutputDialog = (props) => {
             <DialogContent dividers>
                 <DialogContentText>
                     <Typography component="span">
-                        Command: {props.task.name}
+                        Command: {props.task.kwargs}
                     </Typography>
                     <br/>
                     <Typography component="span">
-                        Started: {props.task.parsedDatetime()}
+                        Started: {parseTaskDatetime(props.task)}
                     </Typography>
                     <br/>
                     <Typography component="span">

@@ -12,7 +12,7 @@ const WebsocketComponent = () => {
     const editClient = useStoreClients((state) => state.editClient);
     const deleteClient = useStoreClients((state) => state.deleteClient);
 
-    const loadTasks = useStoreTasks((state) => state.loadTasks);
+    const addOrEditTask = useStoreTasks((state) => state.addOrEditTask);
 
     useEffect(() => {
         socket.on("connect", r => {
@@ -50,7 +50,7 @@ const WebsocketComponent = () => {
             "task-retried"
         ].forEach(e => {
             socket.on(e, r => {
-                loadTasks();
+                addOrEditTask(r);
             })
         })
 

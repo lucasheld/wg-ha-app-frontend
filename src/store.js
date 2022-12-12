@@ -1,23 +1,12 @@
 import create from "zustand";
-import Task from "./data-classes/Task";
 import FlowerApi from "./api/FlowerApi";
 import {CLIENT_DIALOG, CONFIRMATION_DIALOG, WIREGUARD_CONFIG_DIALOG} from "./components/DialogsComponent";
 
-
-const parseTask = (rawTask) => {
-    let task = new Task();
-    task.id = rawTask["uuid"];
-    task.state = rawTask["state"];
-    task.name = rawTask["kwargs"];
-    task.datetime = rawTask["received"];
-    return task;
+const sortTasks = tasks => {
+    return tasks.sort((a, b) => parseFloat(b.received) - parseFloat(a.received));
 };
 
-const sortTasks = (tasks) => {
-    return tasks.sort((a, b) => parseFloat(b.datetime) - parseFloat(a.datetime));
-};
-
-export const useStoreTasks = create((set) => ({
+export const useStoreTasks = create((set, get) => ({
     tasks: [],
     error: "",
     loaded: false,
@@ -29,8 +18,10 @@ export const useStoreTasks = create((set) => ({
                 let taskIds = Object.keys(taskList);
                 let tasks = [];
                 for (let taskId of taskIds) {
-                    let task = parseTask(taskList[taskId]);
-                    tasks.push(task);
+                    let task = taskList[taskId];
+                    if (task.received) {
+                        tasks.push(task);
+                    }
                 }
                 tasks = sortTasks(tasks);
                 set({
@@ -50,7 +41,26 @@ export const useStoreTasks = create((set) => ({
                     loaded: true,
                 })
             })
-    }
+    },
+    addOrEditTask: task => {
+        let tasks = []
+        let edited = false;
+        get().tasks.forEach(t => {
+            if (t.uuid === task.uuid) {
+                tasks.push(task)
+                edited = true;
+            } else {
+                tasks.push(t);
+            }
+        })
+        if (!edited) {
+            tasks.push(task);
+        }
+        tasks = sortTasks(tasks)
+        set({
+            tasks: tasks
+        })
+    },
 }));
 
 export const useStoreClients = create((set, get) => ({

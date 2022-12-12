@@ -13,6 +13,7 @@ import {
 import {Cancel, Done, ErrorOutline} from "@mui/icons-material";
 import PlaybookOutputDialog from "./PlaybookOutputDialog";
 import FlowerApi from "../api/FlowerApi";
+import {parseTaskDatetime} from "../utils";
 
 const TaskComponent = ({task}) => {
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -26,7 +27,7 @@ const TaskComponent = ({task}) => {
     };
 
     const cancelTask = async () => {
-        await FlowerApi.cancelTask(task.id);
+        await FlowerApi.cancelTask(task.uuid);
     };
 
     let taskSucceeded = task.state === "SUCCESS";
@@ -45,7 +46,7 @@ const TaskComponent = ({task}) => {
             >
                 <ListItem
                     disablePadding
-                    key={`listitem-${task.id}`}
+                    key={`listitem-${task.uuid}`}
                 >
                     <ListItemButton
                         onClick={openDialog}
@@ -60,9 +61,9 @@ const TaskComponent = ({task}) => {
                             }
                         </ListItemIcon>
                         <ListItemText
-                            id={`label-${task.id}`}
-                            primary={task.name}
-                            secondary={task.parsedDatetime()}
+                            id={`label-${task.uuid}`}
+                            primary={task.kwargs}
+                            secondary={parseTaskDatetime(task)}
                         />
                         <ListItemSecondaryAction>
                             {
