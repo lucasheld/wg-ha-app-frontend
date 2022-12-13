@@ -65,7 +65,7 @@ const TaskComponent = ({task}) => {
                         </ListItemIcon>
                         <ListItemText
                             id={`label-${task.uuid}`}
-                            primary={task.kwargs}
+                            primary="Ansible Playbook"
                             secondary={parseTaskDatetime(task)}
                         />
                         <ListItemSecondaryAction>

@@ -42,10 +42,6 @@ const PlaybookOutputDialog = (props) => {
             <DialogContent dividers>
                 <DialogContentText>
                     <Typography component="span">
-                        Command: {props.task.kwargs}
-                    </Typography>
-                    <br/>
-                    <Typography component="span">
                         Started: {parseTaskDatetime(props.task)}
                     </Typography>
                     <br/>
