@@ -136,9 +136,28 @@ export const useStoreDialogs = create((set, get) => ({
     }
 }));
 
+const localStorageKey = "wg-ha-app-frontend";
+
+const getLocalStorage = () => {
+    try {
+        let string = localStorage.getItem(localStorageKey);
+        if (string === null) {
+            return {};
+        }
+        return JSON.parse(string);
+    } catch (e) {
+        return {};
+    }
+}
+
+const saveLocalStorage = data => {
+    let string = JSON.stringify(data);
+    localStorage.setItem(localStorageKey, string);
+}
+
 export const useStoreSession = create((set) => ({
-    token: "",
-    username: "",
+    token: getLocalStorage().token || "",
+    username: getLocalStorage().username || "",
     login: ({username, password}) => {
         const requestOptions = {
             method: "POST",
@@ -153,10 +172,15 @@ export const useStoreSession = create((set) => ({
         fetch(`${AnsibleApi.baseUrl}/login`, requestOptions)
             .then(response => response.json())
             .then(response => {
+                let token = response.token;
                 set({
-                    token: response.token,
+                    token: token,
                     username: username
                 })
+                saveLocalStorage({
+                    token: token,
+                    username: username
+                });
             })
             .catch((error) => {
                 console.log(error);
@@ -167,5 +191,6 @@ export const useStoreSession = create((set) => ({
             token: "",
             username: ""
         })
+        saveLocalStorage({});
     }
 }));

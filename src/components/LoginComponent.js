@@ -52,7 +52,6 @@ const LoginComponent = () => {
                         <TextField
                             {...field}
                             required
-                            autoFocus
                             margin="dense"
                             label="Password"
                             type="password"
