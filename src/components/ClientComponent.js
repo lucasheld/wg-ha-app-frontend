@@ -15,17 +15,20 @@ const ClientComponent = (props) => {
     const clientAndClientAppliedMatch = () => {
         // compare client and clientApplied and ignore id
 
-        const client = clients.find(client => client.public_key === props.client.public_key);
-        const clientApplied = clientsApplied.find(client => client.public_key === props.client.public_key);
+        const client = {
+            ...clients.find(client => client.public_key === props.client.public_key),
+            id: null,
+            title: null
+        };
+        const clientApplied = {
+            ...clientsApplied.find(client => client.public_key === props.client.public_key),
+            id: null,
+            title: null
+        };
 
-        let clientJson = JSON.stringify({
-            ...client,
-            id: null
-        });
-        let clientAppliedJson = JSON.stringify({
-            ...clientApplied,
-            id: null
-        });
+        let clientJson = JSON.stringify(client, Object.keys(client).sort());
+        let clientAppliedJson = JSON.stringify(clientApplied, Object.keys(clientApplied).sort());
+
         return clientJson === clientAppliedJson;
     }
 
@@ -45,11 +48,11 @@ const ClientComponent = (props) => {
                                     color: "rgba(0,0,0,0.54)"
                                 }}
                             >
-                            {
-                                clientAndClientAppliedMatch() ?
-                                <Check/> :
-                                <Autorenew/>
-                            }
+                                {
+                                    clientAndClientAppliedMatch() ?
+                                    <Check/> :
+                                    <Autorenew/>
+                                }
                             </IconButton>
                             <IconButton
                                 edge="end"
