@@ -95,6 +95,15 @@ export const useStoreClients = create((set, get) => ({
     }
 }));
 
+export const useStoreClientsApplied = create((set) => ({
+    clientsApplied: [],
+    setClientsApplied: clientsApplied => {
+        set({
+            clientsApplied: clientsApplied
+        })
+    },
+}));
+
 export const useStoreTags = create((set) => ({
     tags: [],
     error: "",

@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import io from "socket.io-client";
-import {useStoreClients, useStoreTasks} from "../store";
+import {useStoreClients, useStoreClientsApplied, useStoreTasks} from "../store";
 
 const socket = io("http://127.0.0.1:5000");
 
@@ -11,6 +11,8 @@ const WebsocketComponent = () => {
     const addClient = useStoreClients((state) => state.addClient);
     const editClient = useStoreClients((state) => state.editClient);
     const deleteClient = useStoreClients((state) => state.deleteClient);
+
+    const setClientsApplied = useStoreClientsApplied((state) => state.setClientsApplied);
 
     const addOrEditTask = useStoreTasks((state) => state.addOrEditTask);
     const editTaskOutput = useStoreTasks((state) => state.editTaskOutput);
@@ -23,6 +25,7 @@ const WebsocketComponent = () => {
         socket.on("disconnect", r => {
             setIsConnected(false);
         });
+
 
         socket.on("setClients", r => {
             setClients(r);
@@ -39,6 +42,12 @@ const WebsocketComponent = () => {
         socket.on("deleteClient", r => {
             deleteClient(r);
         });
+
+
+        socket.on("setClientsApplied", r => {
+            setClientsApplied(r);
+        });
+
 
         [
             "task-sent",
@@ -71,6 +80,8 @@ const WebsocketComponent = () => {
             socket.off("addClient");
             socket.off("editClient");
             socket.off("deleteClient");
+
+            socket.off("setClientsApplied");
 
             socket.off("task-sent");
             socket.off("task-received");

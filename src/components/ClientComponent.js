@@ -1,13 +1,33 @@
 import React from "react";
 import {IconButton, List, ListItem, ListItemButton, ListItemText} from "@mui/material";
-import {Delete, Edit} from "@mui/icons-material";
-import {useStoreDialogs} from "../store";
+import {Autorenew, Check, Delete, Edit} from "@mui/icons-material";
+import {useStoreClients, useStoreClientsApplied, useStoreDialogs} from "../store";
 import AnsibleApi from "../api/AnsibleApi";
 
 const ClientComponent = (props) => {
     const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
     const openConfirmationDialog = useStoreDialogs((state) => state.openConfirmationDialog);
     const openWireGuardConfigDialog = useStoreDialogs((state) => state.openWireGuardConfigDialog);
+
+    const clients = useStoreClients(state => state.clients);
+    const clientsApplied = useStoreClientsApplied(state => state.clientsApplied);
+
+    const clientAndClientAppliedMatch = () => {
+        // compare client and clientApplied and ignore id
+
+        const client = clients.find(client => client.public_key === props.client.public_key);
+        const clientApplied = clientsApplied.find(client => client.public_key === props.client.public_key);
+
+        let clientJson = JSON.stringify({
+            ...client,
+            id: null
+        });
+        let clientAppliedJson = JSON.stringify({
+            ...clientApplied,
+            id: null
+        });
+        return clientJson === clientAppliedJson;
+    }
 
     return (
         <React.Fragment>
@@ -19,6 +39,18 @@ const ClientComponent = (props) => {
                     key={`listitem-${props.client.id}`}
                     secondaryAction={
                         <React.Fragment>
+                            <IconButton
+                                disabled
+                                style={{
+                                    color: "rgba(0,0,0,0.54)"
+                                }}
+                            >
+                            {
+                                clientAndClientAppliedMatch() ?
+                                <Check/> :
+                                <Autorenew/>
+                            }
+                            </IconButton>
                             <IconButton
                                 edge="end"
                                 aria-label="edit"
