@@ -35,10 +35,12 @@ const AddClientDialog = () => {
                 services: [],
             }
     });
+
     const onSubmit = data => {
         props.handleOk(data);
         closeDialog();
     }
+
     const formRef = useRef(null)
 
     return (

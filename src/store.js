@@ -1,6 +1,7 @@
 import create from "zustand";
 import FlowerApi from "./api/FlowerApi";
 import {CLIENT_DIALOG, CONFIRMATION_DIALOG, WIREGUARD_CONFIG_DIALOG} from "./components/DialogsComponent";
+import AnsibleApi from "./api/AnsibleApi";
 
 const sortTasks = tasks => {
     return tasks.sort((a, b) => parseFloat(b.received) - parseFloat(a.received));
@@ -131,6 +132,40 @@ export const useStoreDialogs = create((set, get) => ({
         set({
             open: false,
             type: null,
+        })
+    }
+}));
+
+export const useStoreSession = create((set) => ({
+    token: "",
+    username: "",
+    login: ({username, password}) => {
+        const requestOptions = {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password
+            })
+        };
+        fetch(`${AnsibleApi.baseUrl}/login`, requestOptions)
+            .then(response => response.json())
+            .then(response => {
+                set({
+                    token: response.token,
+                    username: username
+                })
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    },
+    logout: () => {
+        set({
+            token: "",
+            username: ""
         })
     }
 }));
