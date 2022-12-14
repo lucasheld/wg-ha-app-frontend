@@ -7,7 +7,7 @@ const PlaybookOutputDialog = (props) => {
     const tasks = useStoreTasks((state) => state.tasks);
     const editTaskOutput = useStoreTasks((state) => state.editTaskOutput);
 
-    const task = tasks.find(task => task.uuid === props.uuid);
+    const task = tasks.find(task => task.uuid === props.task.uuid);
 
     const getPlaybookOutput = useStoreApi((state) => state.getPlaybookOutput);
 
