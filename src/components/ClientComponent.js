@@ -1,6 +1,15 @@
 import React from "react";
-import {IconButton, List, ListItem, ListItemButton, ListItemText, Tooltip} from "@mui/material";
-import {Autorenew, Check, Delete, Edit} from "@mui/icons-material";
+import {
+    CircularProgress,
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    ListItemText,
+    Tooltip
+} from "@mui/material";
+import {Delete, Done, Edit} from "@mui/icons-material";
 import {useStoreApi, useStoreClients, useStoreClientsApplied, useStoreDialogs} from "../store";
 
 const ClientComponent = (props) => {
@@ -48,25 +57,6 @@ const ClientComponent = (props) => {
                     secondaryAction={
                         <React.Fragment>
                             <Tooltip
-                                title={`Client ${clientApplied ? "" : "not"} applied`}
-                                aria-label={`client ${clientApplied ? "" : "not"} applied`}
-                            >
-                                <span>
-                                    <IconButton
-                                        disabled
-                                        style={{
-                                            color: "rgba(0,0,0,0.54)"
-                                        }}
-                                    >
-                                    {
-                                        clientApplied ?
-                                            <Check/> :
-                                            <Autorenew/>
-                                    }
-                                </IconButton>
-                                </span>
-                            </Tooltip>
-                            <Tooltip
                                 title="Edit client"
                                 aria-label="edit client"
                             >
@@ -113,6 +103,13 @@ const ClientComponent = (props) => {
                             })
                         }}
                     >
+                        <ListItemIcon>
+                            {
+                                clientApplied ?
+                                    <Done/> :
+                                    <CircularProgress size={24}/>
+                            }
+                        </ListItemIcon>
                         <ListItemText
                             id={`label-${props.client.id}`}
                             primary={props.client.title}
