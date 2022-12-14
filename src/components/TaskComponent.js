@@ -12,23 +12,18 @@ import {
 } from "@mui/material";
 import {Cancel, Done, ErrorOutline} from "@mui/icons-material";
 import PlaybookOutputDialog from "./PlaybookOutputDialog";
-import FlowerApi from "../api/FlowerApi";
-import {parseTaskDatetime} from "../utils";
+import {ansibleApiUrl, parseTaskDatetime} from "../utils";
 
 const TaskComponent = ({task}) => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    const openDialog = () => {
-        setDialogOpen(true);
-    };
-
-    const closeDialog = () => {
-        setDialogOpen(false);
-    };
-
-    const cancelTask = async () => {
-        await FlowerApi.cancelTask(task.uuid);
-    };
+    const cancelTask = taskId => {
+        const requestOptions = {
+            method: "POST"
+        };
+        return fetch(`${ansibleApiUrl}/task/revoke/${taskId}?terminate=true`, requestOptions)
+            .then(response => response.json());
+    }
 
     let taskSucceeded = task.state === "SUCCESS";
     let taskFailed = task.state === "FAILURE" || task.state === "REVOKED";
@@ -40,7 +35,7 @@ const TaskComponent = ({task}) => {
                 dialogOpen &&
                 <PlaybookOutputDialog
                     isOpen={dialogOpen}
-                    handleClose={closeDialog}
+                    handleClose={() => setDialogOpen(false)}
                     task={task}
                 />
             }
@@ -52,7 +47,7 @@ const TaskComponent = ({task}) => {
                     key={`listitem-${task.uuid}`}
                 >
                     <ListItemButton
-                        onClick={openDialog}
+                        onClick={() => setDialogOpen(true)}
                     >
                         <ListItemIcon>
                             {
@@ -75,7 +70,9 @@ const TaskComponent = ({task}) => {
                                     title="cancel task">
                                     <IconButton
                                         aria-label="cancel task"
-                                        onClick={cancelTask}
+                                        onClick={async () => {
+                                            await cancelTask(task.uuid);
+                                        }}
                                     >
                                         <Cancel/>
                                     </IconButton>

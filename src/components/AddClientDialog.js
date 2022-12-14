@@ -76,7 +76,6 @@ const AddClientDialog = () => {
                             <TextField
                                 {...field}
                                 required
-                                autoFocus
                                 margin="dense"
                                 label="Private Key"
                                 type="text"

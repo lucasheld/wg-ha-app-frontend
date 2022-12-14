@@ -1,3 +1,6 @@
+export const ansibleApiUrl = `http://${process.env.REACT_APP_BACKEND_HOST}:${process.env.REACT_APP_BACKEND_PORT}/api`;
+export const flowerApiUrl = `http://${process.env.REACT_APP_FLOWER_HOST}:${process.env.REACT_APP_FLOWER_PORT}/api`;
+
 export const parseTaskDatetime = task => {
     let locale = "de-DE";
     let dateObj = new Date(task.received * 1000);

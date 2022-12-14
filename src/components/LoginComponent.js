@@ -14,10 +14,7 @@ const LoginComponent = () => {
     });
 
     const onSubmit = data => {
-        login({
-            username: data.username,
-            password: data.password
-        });
+        login(data);
     }
 
     const formRef = useRef(null)

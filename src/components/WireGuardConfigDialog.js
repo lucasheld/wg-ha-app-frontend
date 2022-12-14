@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import AnsibleApi from "../api/AnsibleApi";
 import {
     Box,
     Button,
@@ -14,7 +13,8 @@ import {
 import {Download, QrCode, TextSnippet} from "@mui/icons-material";
 import {QRCodeSVG} from "qrcode.react";
 import {atomOneLight, CopyBlock} from "react-code-blocks";
-import {useStoreDialogs} from "../store";
+import {useStoreDialogs, useStoreSession} from "../store";
+import {ansibleApiUrl} from "../utils";
 
 const modeEnum = {
     TEXT: "text",
@@ -28,6 +28,17 @@ const WireGuardConfigDialog = () => {
     const open = useStoreDialogs((state) => state.open);
     const props = useStoreDialogs((state) => state.props);
     const closeDialog = useStoreDialogs((state) => state.closeDialog);
+    const token = useStoreSession((state) => state.token);
+
+    const getWireGuardConfig = clientId => {
+        const requestOptions = {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        };
+        return fetch(`${ansibleApiUrl}/config/${clientId}`, requestOptions)
+            .then(response => response.text());
+    }
 
     useEffect(
         () => {
@@ -39,7 +50,7 @@ const WireGuardConfigDialog = () => {
     );
 
     const getOutput = () => {
-        AnsibleApi.getWireGuardConfig(props.client.id)
+        getWireGuardConfig(props.client.id)
             .then(response => {
                 setWireGuardConfig(response);
             })

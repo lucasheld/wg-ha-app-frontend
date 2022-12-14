@@ -1,7 +1,25 @@
 import create from "zustand";
-import FlowerApi from "./api/FlowerApi";
-import {CLIENT_DIALOG, CONFIRMATION_DIALOG, WIREGUARD_CONFIG_DIALOG} from "./components/DialogsComponent";
-import AnsibleApi from "./api/AnsibleApi";
+import {CLIENT_DIALOG, CONFIRMATION_DIALOG, USER_DIALOG, WIREGUARD_CONFIG_DIALOG} from "./components/DialogsComponent";
+import {ansibleApiUrl, flowerApiUrl} from "./utils";
+
+const localStorageKey = "wg-ha-app-frontend";
+
+const getLocalStorage = () => {
+    try {
+        let string = localStorage.getItem(localStorageKey);
+        if (string === null) {
+            return {};
+        }
+        return JSON.parse(string);
+    } catch (e) {
+        return {};
+    }
+}
+
+const saveLocalStorage = data => {
+    let string = JSON.stringify(data);
+    localStorage.setItem(localStorageKey, string);
+}
 
 const sortTasks = tasks => {
     return tasks.sort((a, b) => parseFloat(b.received) - parseFloat(a.received));
@@ -12,7 +30,7 @@ export const useStoreTasks = create((set, get) => ({
     error: "",
     loaded: false,
     loadTasks: () => {
-        const url = `${FlowerApi.baseUrl}/tasks`;
+        const url = `${flowerApiUrl}/tasks`;
         fetch(url)
             .then(res => res.json())
             .then(taskList => {
@@ -136,25 +154,6 @@ export const useStoreDialogs = create((set, get) => ({
     }
 }));
 
-const localStorageKey = "wg-ha-app-frontend";
-
-const getLocalStorage = () => {
-    try {
-        let string = localStorage.getItem(localStorageKey);
-        if (string === null) {
-            return {};
-        }
-        return JSON.parse(string);
-    } catch (e) {
-        return {};
-    }
-}
-
-const saveLocalStorage = data => {
-    let string = JSON.stringify(data);
-    localStorage.setItem(localStorageKey, string);
-}
-
 export const useStoreSession = create((set) => ({
     token: getLocalStorage().token || "",
     username: getLocalStorage().username || "",
@@ -169,7 +168,7 @@ export const useStoreSession = create((set) => ({
                 password: password
             })
         };
-        fetch(`${AnsibleApi.baseUrl}/login`, requestOptions)
+        fetch(`${ansibleApiUrl}/login`, requestOptions)
             .then(response => response.json())
             .then(response => {
                 let token = response.token;

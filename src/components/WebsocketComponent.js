@@ -1,12 +1,8 @@
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import io from "socket.io-client";
-import {useStoreClients, useStoreClientsApplied, useStoreTasks} from "../store";
-
-const socket = io("http://127.0.0.1:5000");
+import {useStoreClients, useStoreClientsApplied, useStoreSession, useStoreTasks} from "../store";
 
 const WebsocketComponent = () => {
-    const [isConnected, setIsConnected] = useState(socket.connected);
-
     const setClients = useStoreClients((state) => state.setClients);
     const addClient = useStoreClients((state) => state.addClient);
     const editClient = useStoreClients((state) => state.editClient);
@@ -17,13 +13,21 @@ const WebsocketComponent = () => {
     const addOrEditTask = useStoreTasks((state) => state.addOrEditTask);
     const editTaskOutput = useStoreTasks((state) => state.editTaskOutput);
 
+    const token = useStoreSession((state) => state.token);
+
     useEffect(() => {
+        const socket = io("http://127.0.0.1:5000", {
+            extraHeaders: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
         socket.on("connect", r => {
-            setIsConnected(true);
+
         });
 
         socket.on("disconnect", r => {
-            setIsConnected(false);
+
         });
 
 

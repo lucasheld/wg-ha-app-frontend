@@ -1,8 +1,8 @@
 import React from "react";
 import {IconButton, List, ListItem, ListItemButton, ListItemText} from "@mui/material";
 import {Autorenew, Check, Delete, Edit} from "@mui/icons-material";
-import {useStoreClients, useStoreClientsApplied, useStoreDialogs} from "../store";
-import AnsibleApi from "../api/AnsibleApi";
+import {useStoreClients, useStoreClientsApplied, useStoreDialogs, useStoreSession} from "../store";
+import {ansibleApiUrl} from "../utils";
 
 const ClientComponent = (props) => {
     const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
@@ -11,6 +11,30 @@ const ClientComponent = (props) => {
 
     const clients = useStoreClients(state => state.clients);
     const clientsApplied = useStoreClientsApplied(state => state.clientsApplied);
+    const token = useStoreSession((state) => state.token);
+
+    const editClient = (clientId, body) => {
+        const requestOptions = {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            body: JSON.stringify(body)
+        };
+        return fetch(`${ansibleApiUrl}/client/${clientId}`, requestOptions)
+            .then(response => response.json());
+    }
+
+    const deleteClient = clientId => {
+        const requestOptions = {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        };
+        return fetch(`${ansibleApiUrl}/client/${clientId}`, requestOptions);
+    }
 
     const clientAndClientAppliedMatch = () => {
         // compare client and clientApplied and ignore id
@@ -61,7 +85,7 @@ const ClientComponent = (props) => {
                                     openClientDialog({
                                         client: props.client,
                                         handleOk: async (body) => {
-                                            await AnsibleApi.editClient(props.client.id, body);
+                                            await editClient(props.client.id, body);
                                         }
                                     });
                                 }}
@@ -75,7 +99,7 @@ const ClientComponent = (props) => {
                                     openConfirmationDialog({
                                         title: "Delete client",
                                         content: `Are you sure you want to delete the client "${props.client.title}"?`,
-                                        handleOk: () => AnsibleApi.deleteClient(props.client.id)
+                                        handleOk: () => deleteClient(props.client.id)
                                     })
                                 }}
                             >
