@@ -1,24 +1,15 @@
 import {useEffect} from "react";
 import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography} from "@mui/material";
-import {ansibleApiUrl, parseTaskDatetime} from "../utils";
-import {useStoreSession, useStoreTasks} from "../store";
+import {parseTaskDatetime} from "../utils";
+import {useStoreApi, useStoreTasks} from "../store";
 
 const PlaybookOutputDialog = (props) => {
     const tasks = useStoreTasks((state) => state.tasks);
     const editTaskOutput = useStoreTasks((state) => state.editTaskOutput);
 
-    const task = tasks.find(task => task.uuid === props.task.uuid);
-    const token = useStoreSession((state) => state.token);
+    const task = tasks.find(task => task.uuid === props.uuid);
 
-    const getPlaybookOutput = taskId => {
-        const requestOptions = {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        };
-        return fetch(`${ansibleApiUrl}/playbook/${taskId}`, requestOptions)
-            .then(response => response.json());
-    }
+    const getPlaybookOutput = useStoreApi((state) => state.getPlaybookOutput);
 
     useEffect(() => {
         if (props.isOpen) {

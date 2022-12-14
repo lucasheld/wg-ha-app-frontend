@@ -22,7 +22,7 @@ import {
 import {AccountCircle, Devices, Memory, Person} from "@mui/icons-material";
 import UsersComponent from "./components/UsersComponent";
 import ClientsComponent from "./components/ClientsComponent";
-import {useStoreSession, useStoreTasks} from "./store";
+import {useStoreApi, useStoreDialogs, useStoreSession, useStoreTasks} from "./store";
 import DialogsComponent from "./components/DialogsComponent";
 import WebsocketComponent from "./components/WebsocketComponent";
 import LoginComponent from "./components/LoginComponent";
@@ -38,6 +38,12 @@ const App = () => {
     const logout = useStoreSession((state) => state.logout);
     const token = useStoreSession((state) => state.token);
     const username = useStoreSession((state) => state.username);
+    const roles = useStoreSession((state) => state.roles);
+    const user_id = useStoreSession((state) => state.user_id);
+
+    const openPasswordDialog = useStoreDialogs((state) => state.openPasswordDialog);
+
+    const editUser = useStoreApi((state) => state.editUser);
 
     useEffect(() => {
         loadTasks();
@@ -71,6 +77,10 @@ const App = () => {
                             {
                                 !!token &&
                                 <div>
+                                    <span>{`Username: ${username}`}</span>
+                                    <span>, </span>
+                                    <span>{`Roles: ${roles}`}</span>
+                                    <span> </span>
                                     <IconButton
                                         edge="end"
                                         color="inherit"
@@ -96,7 +106,12 @@ const App = () => {
                                         <MenuItem
                                             onClick={() => {
                                                 setAnchorEl(null);
-                                                // TODO: open edit user dialog
+                                                openPasswordDialog({
+                                                    handleOk: async (body) => {
+                                                        await editUser(user_id, body);
+                                                        logout();
+                                                    }
+                                                });
                                             }}
                                         >
                                             Edit user
@@ -125,21 +140,24 @@ const App = () => {
                         <Toolbar/>
                         <Box sx={{overflow: "auto"}}>
                             <List>
-                                <ListItem key="tasks" disablePadding>
-                                    <ListItemButton
-                                        onClick={() => setDisplayComponent(<TasksComponent/>)}
-                                    >
-                                        <ListItemIcon>
-                                            <Badge
-                                                badgeContent={countRunningTasks()}
-                                                color="primary"
-                                            >
-                                                <Memory/>
-                                            </Badge>
-                                        </ListItemIcon>
-                                        <ListItemText primary="Tasks"/>
-                                    </ListItemButton>
-                                </ListItem>
+                                {
+                                    roles.includes("admin") &&
+                                    <ListItem key="tasks" disablePadding>
+                                        <ListItemButton
+                                            onClick={() => setDisplayComponent(<TasksComponent/>)}
+                                        >
+                                            <ListItemIcon>
+                                                <Badge
+                                                    badgeContent={countRunningTasks()}
+                                                    color="primary"
+                                                >
+                                                    <Memory/>
+                                                </Badge>
+                                            </ListItemIcon>
+                                            <ListItemText primary="Tasks"/>
+                                        </ListItemButton>
+                                    </ListItem>
+                                }
                                 <ListItem key="clients" disablePadding>
                                     <ListItemButton
                                         onClick={() => setDisplayComponent(<ClientsComponent/>)}
@@ -150,16 +168,19 @@ const App = () => {
                                         <ListItemText primary="Clients"/>
                                     </ListItemButton>
                                 </ListItem>
-                                <ListItem key="users" disablePadding>
-                                    <ListItemButton
-                                        onClick={() => setDisplayComponent(<UsersComponent/>)}
-                                    >
-                                        <ListItemIcon>
-                                            <Person/>
-                                        </ListItemIcon>
-                                        <ListItemText primary="Users"/>
-                                    </ListItemButton>
-                                </ListItem>
+                                {
+                                    roles.includes("admin") &&
+                                    <ListItem key="users" disablePadding>
+                                        <ListItemButton
+                                            onClick={() => setDisplayComponent(<UsersComponent/>)}
+                                        >
+                                            <ListItemIcon>
+                                                <Person/>
+                                            </ListItemIcon>
+                                            <ListItemText primary="Users"/>
+                                        </ListItemButton>
+                                    </ListItem>
+                                }
                             </List>
                         </Box>
                     </Drawer>

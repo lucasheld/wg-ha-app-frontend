@@ -1,8 +1,7 @@
 import React from "react";
-import {IconButton, List, ListItem, ListItemButton, ListItemText} from "@mui/material";
+import {IconButton, List, ListItem, ListItemButton, ListItemText, Tooltip} from "@mui/material";
 import {Autorenew, Check, Delete, Edit} from "@mui/icons-material";
-import {useStoreClients, useStoreClientsApplied, useStoreDialogs, useStoreSession} from "../store";
-import {ansibleApiUrl} from "../utils";
+import {useStoreApi, useStoreClients, useStoreClientsApplied, useStoreDialogs} from "../store";
 
 const ClientComponent = (props) => {
     const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
@@ -10,31 +9,11 @@ const ClientComponent = (props) => {
     const openWireGuardConfigDialog = useStoreDialogs((state) => state.openWireGuardConfigDialog);
 
     const clients = useStoreClients(state => state.clients);
+
     const clientsApplied = useStoreClientsApplied(state => state.clientsApplied);
-    const token = useStoreSession((state) => state.token);
 
-    const editClient = (clientId, body) => {
-        const requestOptions = {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify(body)
-        };
-        return fetch(`${ansibleApiUrl}/client/${clientId}`, requestOptions)
-            .then(response => response.json());
-    }
-
-    const deleteClient = clientId => {
-        const requestOptions = {
-            method: "DELETE",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        };
-        return fetch(`${ansibleApiUrl}/client/${clientId}`, requestOptions);
-    }
+    const editClient = useStoreApi((state) => state.editClient);
+    const deleteClient = useStoreApi((state) => state.deleteClient);
 
     const clientAndClientAppliedMatch = () => {
         // compare client and clientApplied and ignore id
@@ -56,6 +35,8 @@ const ClientComponent = (props) => {
         return clientJson === clientAppliedJson;
     }
 
+    const clientApplied = clientAndClientAppliedMatch();
+
     return (
         <React.Fragment>
             <List
@@ -66,45 +47,62 @@ const ClientComponent = (props) => {
                     key={`listitem-${props.client.id}`}
                     secondaryAction={
                         <React.Fragment>
-                            <IconButton
-                                disabled
-                                style={{
-                                    color: "rgba(0,0,0,0.54)"
-                                }}
+                            <Tooltip
+                                title={`Client ${clientApplied ? "" : "not"} applied`}
+                                aria-label={`client ${clientApplied ? "" : "not"} applied`}
                             >
-                                {
-                                    clientAndClientAppliedMatch() ?
-                                    <Check/> :
-                                    <Autorenew/>
-                                }
-                            </IconButton>
-                            <IconButton
-                                edge="end"
-                                aria-label="edit"
-                                onClick={() => {
-                                    openClientDialog({
-                                        client: props.client,
-                                        handleOk: async (body) => {
-                                            await editClient(props.client.id, body);
-                                        }
-                                    });
-                                }}
+                                <span>
+                                    <IconButton
+                                        disabled
+                                        style={{
+                                            color: "rgba(0,0,0,0.54)"
+                                        }}
+                                    >
+                                    {
+                                        clientApplied ?
+                                            <Check/> :
+                                            <Autorenew/>
+                                    }
+                                </IconButton>
+                                </span>
+                            </Tooltip>
+                            <Tooltip
+                                title="Edit client"
+                                aria-label="edit client"
                             >
-                                <Edit/>
-                            </IconButton>
-                            <IconButton
-                                edge="end"
-                                aria-label="delete"
-                                onClick={() => {
-                                    openConfirmationDialog({
-                                        title: "Delete client",
-                                        content: `Are you sure you want to delete the client "${props.client.title}"?`,
-                                        handleOk: () => deleteClient(props.client.id)
-                                    })
-                                }}
+                                <IconButton
+                                    edge="end"
+                                    aria-label="edit"
+                                    onClick={() => {
+                                        openClientDialog({
+                                            client: props.client,
+                                            handleOk: async (body) => {
+                                                await editClient(props.client.id, body);
+                                            }
+                                        });
+                                    }}
+                                >
+                                    <Edit/>
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip
+                                title="Delete client"
+                                aria-label="delete client"
                             >
-                                <Delete/>
-                            </IconButton>
+                                <IconButton
+                                    edge="end"
+                                    aria-label="delete"
+                                    onClick={() => {
+                                        openConfirmationDialog({
+                                            title: "Delete client",
+                                            content: `Are you sure you want to delete the client "${props.client.title}"?`,
+                                            handleOk: () => deleteClient(props.client.id)
+                                        })
+                                    }}
+                                >
+                                    <Delete/>
+                                </IconButton>
+                            </Tooltip>
                         </React.Fragment>
                     }
                 >

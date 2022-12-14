@@ -12,22 +12,17 @@ import {
 } from "@mui/material";
 import {Cancel, Done, ErrorOutline} from "@mui/icons-material";
 import PlaybookOutputDialog from "./PlaybookOutputDialog";
-import {ansibleApiUrl, parseTaskDatetime} from "../utils";
+import {parseTaskDatetime} from "../utils";
+import {useStoreApi} from "../store";
 
 const TaskComponent = ({task}) => {
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    const cancelTask = taskId => {
-        const requestOptions = {
-            method: "POST"
-        };
-        return fetch(`${ansibleApiUrl}/task/revoke/${taskId}?terminate=true`, requestOptions)
-            .then(response => response.json());
-    }
-
     let taskSucceeded = task.state === "SUCCESS";
     let taskFailed = task.state === "FAILURE" || task.state === "REVOKED";
     let taskRunning = !(taskSucceeded || taskFailed);
+
+    const cancelTask = useStoreApi((state) => state.cancelTask);
 
     return (
         <React.Fragment>

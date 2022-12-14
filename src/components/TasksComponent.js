@@ -1,6 +1,6 @@
-import {useStoreTasks} from "../store";
 import {Alert, List, Paper} from "@mui/material";
 import TaskComponent from "./TaskComponent";
+import {useStoreTasks} from "../store";
 
 const TasksComponent = () => {
     const tasks = useStoreTasks((state) => state.tasks);

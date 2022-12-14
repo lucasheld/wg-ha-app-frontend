@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import io from "socket.io-client";
-import {useStoreClients, useStoreClientsApplied, useStoreSession, useStoreTasks} from "../store";
+import {useStoreClients, useStoreClientsApplied, useStoreSession, useStoreTasks, useStoreUsers} from "../store";
 
 const WebsocketComponent = () => {
     const setClients = useStoreClients((state) => state.setClients);
@@ -9,6 +9,11 @@ const WebsocketComponent = () => {
     const deleteClient = useStoreClients((state) => state.deleteClient);
 
     const setClientsApplied = useStoreClientsApplied((state) => state.setClientsApplied);
+
+    const setUsers = useStoreUsers((state) => state.setUsers);
+    const addUser = useStoreUsers((state) => state.addUser);
+    const editUser = useStoreUsers((state) => state.editUser);
+    const deleteUser = useStoreUsers((state) => state.deleteUser);
 
     const addOrEditTask = useStoreTasks((state) => state.addOrEditTask);
     const editTaskOutput = useStoreTasks((state) => state.editTaskOutput);
@@ -50,6 +55,23 @@ const WebsocketComponent = () => {
 
         socket.on("setClientsApplied", r => {
             setClientsApplied(r);
+        });
+
+
+        socket.on("setUsers", r => {
+            setUsers(r);
+        });
+
+        socket.on("addUser", r => {
+            addUser(r);
+        });
+
+        socket.on("editUser", r => {
+            editUser(r);
+        });
+
+        socket.on("deleteUser", r => {
+            deleteUser(r);
         });
 
 
