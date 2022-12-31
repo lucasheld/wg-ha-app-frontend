@@ -99,26 +99,30 @@ const WebsocketComponent = () => {
         })
 
         return () => {
-            socket.off("connect");
-            socket.off("disconnect");
-
-            socket.off("setClients");
-            socket.off("addClient");
-            socket.off("editClient");
-            socket.off("deleteClient");
-
-            socket.off("setClientsApplied");
-
-            socket.off("task-sent");
-            socket.off("task-received");
-            socket.off("task-started");
-            socket.off("task-succeeded");
-            socket.off("task-failed");
-            socket.off("task-rejected");
-            socket.off("task-revoked");
-            socket.off("task-retried");
-
-            socket.off("task-progress");
+            [
+                "connect",
+                "disconnect",
+                "setClients",
+                "addClient",
+                "editClient",
+                "deleteClient",
+                "setClientsApplied",
+                "setUsers",
+                "addUser",
+                "editUser",
+                "deleteUser",
+                "task-sent",
+                "task-received",
+                "task-started",
+                "task-succeeded",
+                "task-failed",
+                "task-rejected",
+                "task-revoked",
+                "task-retried",
+                "task-progress",
+            ].forEach(e => {
+                socket.off(e)
+            })
 
             socket.offAny();
         };

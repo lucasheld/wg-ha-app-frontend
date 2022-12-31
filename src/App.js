@@ -186,7 +186,10 @@ const App = () => {
                     </Drawer>
                     <Box component="main" sx={{flexGrow: 1, p: 3}}>
                         <Toolbar/>
-                        <WebsocketComponent/>
+                        {
+                            token &&
+                            <WebsocketComponent/>
+                        }
                         {displayComponent}
                     </Box>
                 </Box>
