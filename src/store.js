@@ -256,7 +256,7 @@ export const useStore = create((setStore, getStore) => ({
                     "Authorization": `Bearer ${token}`
                 }
             };
-            return fetch(`${ansibleApiUrl}/config/${clientId}`, requestOptions)
+            return fetch(`${ansibleApiUrl}/client/${clientId}/config`, requestOptions)
                 .then(response => response.text());
         },
         getPlaybookOutput: taskId => {
