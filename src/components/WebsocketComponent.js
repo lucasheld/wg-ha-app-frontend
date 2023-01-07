@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import io from "socket.io-client";
-import {useStoreClients, useStoreClientsApplied, useStoreSession, useStoreTasks, useStoreUsers} from "../store";
+import {useStoreClients, useStoreClientsApplied, useStoreKeycloak, useStoreTasks} from "../store";
 
 const WebsocketComponent = () => {
     const setClients = useStoreClients((state) => state.setClients);
@@ -10,15 +10,10 @@ const WebsocketComponent = () => {
 
     const setClientsApplied = useStoreClientsApplied((state) => state.setClientsApplied);
 
-    const setUsers = useStoreUsers((state) => state.setUsers);
-    const addUser = useStoreUsers((state) => state.addUser);
-    const editUser = useStoreUsers((state) => state.editUser);
-    const deleteUser = useStoreUsers((state) => state.deleteUser);
-
     const addOrEditTask = useStoreTasks((state) => state.addOrEditTask);
     const editTaskOutput = useStoreTasks((state) => state.editTaskOutput);
 
-    const token = useStoreSession((state) => state.token);
+    const token = useStoreKeycloak((state) => state.token);
 
     useEffect(() => {
         const socket = io("http://127.0.0.1:5000", {
@@ -58,23 +53,6 @@ const WebsocketComponent = () => {
         });
 
 
-        socket.on("setUsers", r => {
-            setUsers(r);
-        });
-
-        socket.on("addUser", r => {
-            addUser(r);
-        });
-
-        socket.on("editUser", r => {
-            editUser(r);
-        });
-
-        socket.on("deleteUser", r => {
-            deleteUser(r);
-        });
-
-
         [
             "task-sent",
             "task-received",
@@ -107,10 +85,6 @@ const WebsocketComponent = () => {
                 "editClient",
                 "deleteClient",
                 "setClientsApplied",
-                "setUsers",
-                "addUser",
-                "editUser",
-                "deleteUser",
                 "task-sent",
                 "task-received",
                 "task-started",

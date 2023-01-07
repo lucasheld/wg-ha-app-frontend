@@ -14,36 +14,28 @@ import {
     ListItemButton,
     ListItemIcon,
     ListItemText,
-    Menu,
-    MenuItem,
     Toolbar,
+    Tooltip,
     Typography
 } from "@mui/material";
-import {AccountCircle, Devices, Memory, Person} from "@mui/icons-material";
-import UsersComponent from "./components/UsersComponent";
+import {Devices, Logout, Memory} from "@mui/icons-material";
 import ClientsComponent from "./components/ClientsComponent";
-import {useStoreApi, useStoreDialogs, useStoreSession, useStoreTasks} from "./store";
+import {useStoreKeycloak, useStoreTasks} from "./store";
 import DialogsComponent from "./components/DialogsComponent";
 import WebsocketComponent from "./components/WebsocketComponent";
-import LoginComponent from "./components/LoginComponent";
+import KeycloakComponent from "./components/KeycloakComponent";
 
 
 const App = () => {
-    const [displayComponent, setDisplayComponent] = useState(<TasksComponent/>);
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const token = useStoreKeycloak((state) => state.token);
 
+    const logout = useStoreKeycloak((state) => state.logout);
+    const roles = useStoreKeycloak((state) => state.roles);
     const tasks = useStoreTasks((state) => state.tasks);
+
     const loadTasks = useStoreTasks((state) => state.loadTasks);
 
-    const logout = useStoreSession((state) => state.logout);
-    const token = useStoreSession((state) => state.token);
-    const username = useStoreSession((state) => state.username);
-    const roles = useStoreSession((state) => state.roles);
-    const user_id = useStoreSession((state) => state.user_id);
-
-    const openPasswordDialog = useStoreDialogs((state) => state.openPasswordDialog);
-
-    const editUser = useStoreApi((state) => state.editUser);
+    const [displayComponent, setDisplayComponent] = useState(roles.includes("app-admin") ? <TasksComponent/> : <ClientsComponent/>);
 
     useEffect(() => {
         loadTasks();
@@ -66,7 +58,7 @@ const App = () => {
 
             {
                 !token ?
-                <LoginComponent/> :
+                <KeycloakComponent/> :
                 <Box sx={{display: "flex"}}>
                     <CssBaseline/>
                     <AppBar position="fixed" sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
@@ -77,54 +69,19 @@ const App = () => {
                             {
                                 !!token &&
                                 <div>
-                                    <span>{`Username: ${username}`}</span>
-                                    <span>, </span>
-                                    <span>{`Roles: ${roles}`}</span>
-                                    <span> </span>
-                                    <IconButton
-                                        edge="end"
-                                        color="inherit"
-                                        onClick={event => setAnchorEl(event.currentTarget)}
+                                    <Tooltip
+                                        title="Logout"
                                     >
-                                        <AccountCircle />
-                                    </IconButton>
-                                    <Menu
-                                        id="user-menu"
-                                        anchorEl={anchorEl}
-                                        anchorOrigin={{
-                                            vertical: 'top',
-                                            horizontal: 'right',
-                                        }}
-                                        keepMounted
-                                        transformOrigin={{
-                                            vertical: 'top',
-                                            horizontal: 'right',
-                                        }}
-                                        open={Boolean(anchorEl)}
-                                        onClose={() => setAnchorEl(null)}
-                                    >
-                                        <MenuItem
+                                        <IconButton
+                                            edge="end"
+                                            color="inherit"
                                             onClick={() => {
-                                                setAnchorEl(null);
-                                                openPasswordDialog({
-                                                    handleOk: async (body) => {
-                                                        await editUser(user_id, body);
-                                                        logout();
-                                                    }
-                                                });
-                                            }}
-                                        >
-                                            Edit user
-                                        </MenuItem>
-                                        <MenuItem
-                                            onClick={() => {
-                                                setAnchorEl(null);
                                                 logout();
                                             }}
                                         >
-                                            Logout
-                                        </MenuItem>
-                                    </Menu>
+                                            <Logout/>
+                                        </IconButton>
+                                    </Tooltip>
                                 </div>
                             }
                         </Toolbar>
@@ -141,7 +98,7 @@ const App = () => {
                         <Box sx={{overflow: "auto"}}>
                             <List>
                                 {
-                                    roles.includes("admin") &&
+                                    roles.includes("app-admin") &&
                                     <ListItem key="tasks" disablePadding>
                                         <ListItemButton
                                             onClick={() => setDisplayComponent(<TasksComponent/>)}
@@ -168,19 +125,6 @@ const App = () => {
                                         <ListItemText primary="Clients"/>
                                     </ListItemButton>
                                 </ListItem>
-                                {
-                                    roles.includes("admin") &&
-                                    <ListItem key="users" disablePadding>
-                                        <ListItemButton
-                                            onClick={() => setDisplayComponent(<UsersComponent/>)}
-                                        >
-                                            <ListItemIcon>
-                                                <Person/>
-                                            </ListItemIcon>
-                                            <ListItemText primary="Users"/>
-                                        </ListItemButton>
-                                    </ListItem>
-                                }
                             </List>
                         </Box>
                     </Drawer>

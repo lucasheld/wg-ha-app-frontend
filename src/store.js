@@ -1,85 +1,36 @@
 import create from "zustand";
-import {
-    CLIENT_DIALOG,
-    CONFIRMATION_DIALOG,
-    PASSWORD_DIALOG,
-    USER_DIALOG,
-    WIREGUARD_CONFIG_DIALOG
-} from "./components/DialogsComponent";
+import {CLIENT_DIALOG, CONFIRMATION_DIALOG, WIREGUARD_CONFIG_DIALOG} from "./components/DialogsComponent";
 import {ansibleApiUrl, flowerApiUrl} from "./utils";
-
-const localStorageKey = "wg-ha-app-frontend";
-
-const getLocalStorage = () => {
-    try {
-        let string = localStorage.getItem(localStorageKey);
-        if (string === null) {
-            return {};
-        }
-        return JSON.parse(string);
-    } catch (e) {
-        return {};
-    }
-}
-
-const saveLocalStorage = data => {
-    let string = JSON.stringify(data);
-    localStorage.setItem(localStorageKey, string);
-}
 
 const sortTasks = tasks => {
     return tasks.sort((a, b) => parseFloat(b.received) - parseFloat(a.received));
 };
 
 export const useStore = create((setStore, getStore) => ({
-    session: create((set, get) => ({
-            token: getLocalStorage().token || "",
-            username: getLocalStorage().username || "",
-            roles: getLocalStorage().roles || [],
-            user_id: getLocalStorage().user_id || "",
-            login: ({username, password}) => {
-                const requestOptions = {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password
-                    })
-                };
-                fetch(`${ansibleApiUrl}/session`, requestOptions)
-                    .then(response => response.json())
-                    .then(response => {
-                        let token = response.token;
-                        let roles = response.roles;
-                        let user_id = response.user_id;
-                        set({
-                            token: token,
-                            username: username,
-                            roles: roles,
-                            user_id: user_id
-                        })
-                        saveLocalStorage({
-                            token: token,
-                            username: username,
-                            roles: roles,
-                            user_id: user_id
-                        });
-                    })
-                    .catch((error) => {
-                        console.log(error);
-                    });
-            },
-            logout: () => {
-                set({
-                    token: "",
-                    username: "",
-                    roles: "",
-                    user_id: ""
-                })
-                saveLocalStorage({});
-            }
+    keycloak: create((set, get) => ({
+        keycloak: null,
+        token: "",
+        roles: [],
+        setKeycloak: keycloak => {
+            set({
+                keycloak: keycloak
+            })
+        },
+        setToken: token => {
+            set({
+                token: token
+            })
+        },
+        setRoles: roles => {
+            set({
+                roles: roles
+            })
+        },
+        logout: () => {
+            get().keycloak.logout({
+                redirectUri: "http://127.0.0.1:3000"
+            });
+        }
     })),
     dialogs: create((set, get) => ({
         open: false,
@@ -95,35 +46,10 @@ export const useStore = create((setStore, getStore) => ({
         openConfirmationDialog: (props) => get().openDialog(CONFIRMATION_DIALOG, props),
         openClientDialog: (props) => get().openDialog(CLIENT_DIALOG, props),
         openWireGuardConfigDialog: (props) => get().openDialog(WIREGUARD_CONFIG_DIALOG, props),
-        openUserDialog: (props) => get().openDialog(USER_DIALOG, props),
-        openPasswordDialog: (props) => get().openDialog(PASSWORD_DIALOG, props),
         closeDialog: () => {
             set({
                 open: false,
                 type: null
-            })
-        }
-    })),
-    users: create((set, get) => ({
-        users: [],
-        setUsers: users => {
-            set({
-                users: users
-            })
-        },
-        addUser: user => {
-            set({
-                users: [...get().users, user]
-            })
-        },
-        editUser: user => {
-            set({
-                users: get().users.map(i => i.id === user.id ? user : i)
-            })
-        },
-        deleteUser: userId => {
-            set({
-                users: get().users.filter(i => i.id !== userId)
             })
         }
     })),
@@ -224,7 +150,7 @@ export const useStore = create((setStore, getStore) => ({
     })),
     api: create((set, get) => ({
         addClient: body => {
-            const token = getStore().session.getState().token;
+            const token = getStore().keycloak.getState().token;
             const requestOptions = {
                 method: "POST",
                 headers: {
@@ -237,7 +163,7 @@ export const useStore = create((setStore, getStore) => ({
                 .then(response => response.json());
         },
         editClient: (clientId, body) => {
-            const token = getStore().session.getState().token;
+            const token = getStore().keycloak.getState().token;
             const requestOptions = {
                 method: "PATCH",
                 headers: {
@@ -250,7 +176,7 @@ export const useStore = create((setStore, getStore) => ({
                 .then(response => response.json());
         },
         getWireGuardConfig: clientId => {
-            const token = getStore().session.getState().token;
+            const token = getStore().keycloak.getState().token;
             const requestOptions = {
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -260,7 +186,7 @@ export const useStore = create((setStore, getStore) => ({
                 .then(response => response.text());
         },
         getPlaybookOutput: taskId => {
-            const token = getStore().session.getState().token;
+            const token = getStore().keycloak.getState().token;
             const requestOptions = {
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -276,31 +202,8 @@ export const useStore = create((setStore, getStore) => ({
             return fetch(`${flowerApiUrl}/task/revoke/${taskId}?terminate=true`, requestOptions)
                 .then(response => response.json());
         },
-        editUser: (userId, body) => {
-            const token = getStore().session.getState().token;
-            const requestOptions = {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify(body)
-            };
-            return fetch(`${ansibleApiUrl}/user/${userId}`, requestOptions)
-                .then(response => response.json());
-        },
-        deleteUser: userId => {
-            const token = getStore().session.getState().token;
-            const requestOptions = {
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            };
-            return fetch(`${ansibleApiUrl}/user/${userId}`, requestOptions);
-        },
         deleteClient: clientId => {
-            const token = getStore().session.getState().token;
+            const token = getStore().keycloak.getState().token;
             const requestOptions = {
                 method: "DELETE",
                 headers: {
@@ -309,25 +212,11 @@ export const useStore = create((setStore, getStore) => ({
             };
             return fetch(`${ansibleApiUrl}/client/${clientId}`, requestOptions);
         },
-        addUser: body => {
-            const token = getStore().session.getState().token;
-            const requestOptions = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify(body)
-            };
-            return fetch(`${ansibleApiUrl}/user`, requestOptions)
-                .then(response => response.json());
-        }
     })),
 }));
 
-export const useStoreSession = (state) => useStore((s) => s.session(state));
+export const useStoreKeycloak = (state) => useStore((s) => s.keycloak(state));
 export const useStoreDialogs = (state) => useStore((s) => s.dialogs(state));
-export const useStoreUsers = (state) => useStore((s) => s.users(state));
 export const useStoreClientsApplied = (state) => useStore((s) => s.clientsApplied(state));
 export const useStoreClients = (state) => useStore((s) => s.clients(state));
 export const useStoreTasks = (state) => useStore((s) => s.tasks(state));
