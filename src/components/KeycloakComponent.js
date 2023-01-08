@@ -19,8 +19,6 @@ const KeycloakComponent = () => {
                 setRoles(roles);
                 let token = keycloak.token;
                 setToken(token);
-                window.accessToken = token;
-                console.log(token);
             }
         })
     }, []);
