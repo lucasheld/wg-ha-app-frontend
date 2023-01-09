@@ -19,8 +19,23 @@ const KeycloakComponent = () => {
                 setRoles(roles);
                 let token = keycloak.token;
                 setToken(token);
+            } else {
+                window.location.reload();
             }
-        })
+
+            // Token Refresh
+            setInterval(() => {
+                keycloak.updateToken(70).then((refreshed) => {
+                    if (refreshed) {
+                        console.info("Refreshed Keycloak token");
+                    }
+                }).catch(() => {
+                    console.error('Failed to refresh Keycloak token');
+                });
+            }, 6000)
+        }).catch(function() {
+            console.error("Failed to initialize Keycloak");
+        });
     }, []);
 
     return <Grid
