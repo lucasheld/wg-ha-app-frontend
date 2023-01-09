@@ -40,6 +40,21 @@ const TaskComponent = ({task}) => {
                 <ListItem
                     disablePadding
                     key={`listitem-${task.uuid}`}
+                    secondaryAction={
+                        taskRunning &&
+                        <Tooltip
+                            title="cancel task">
+                            <IconButton
+                                aria-label="cancel task"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    cancelTask(task.uuid);
+                                }}
+                            >
+                                <Cancel/>
+                            </IconButton>
+                        </Tooltip>
+                    }
                 >
                     <ListItemButton
                         onClick={() => setDialogOpen(true)}
@@ -58,22 +73,6 @@ const TaskComponent = ({task}) => {
                             primary="Ansible Playbook"
                             secondary={parseTaskDatetime(task)}
                         />
-                        <ListItemSecondaryAction>
-                            {
-                                taskRunning &&
-                                <Tooltip
-                                    title="cancel task">
-                                    <IconButton
-                                        aria-label="cancel task"
-                                        onClick={async () => {
-                                            await cancelTask(task.uuid);
-                                        }}
-                                    >
-                                        <Cancel/>
-                                    </IconButton>
-                                </Tooltip>
-                            }
-                        </ListItemSecondaryAction>
                     </ListItemButton>
                 </ListItem>
             </List>
