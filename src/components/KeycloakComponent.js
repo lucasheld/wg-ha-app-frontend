@@ -37,19 +37,21 @@ const KeycloakComponent = () => {
         });
     }, []);
 
-    return <Grid
-        container
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        style={{
-            minHeight: "100vh"
-        }}
-    >
-        <Grid item>
-            <CircularProgress size={50} />
+    return (
+        <Grid
+            container
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            style={{
+                minHeight: "100vh"
+            }}
+        >
+            <Grid item>
+                <CircularProgress size={50} />
+            </Grid>
         </Grid>
-    </Grid>;
+    );
 }
 
 export default KeycloakComponent;

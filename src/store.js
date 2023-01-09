@@ -159,8 +159,11 @@ export const useStore = create((setStore, getStore) => ({
                 },
                 body: JSON.stringify(body)
             };
-            return fetch(`${ansibleApiUrl}/client`, requestOptions)
-                .then(response => response.json());
+            return get().requestAndNotify(
+                `${ansibleApiUrl}/client`,
+                requestOptions,
+                "Client added"
+            )
         },
         editClient: (clientId, body) => {
             const token = getStore().keycloak.getState().token;
@@ -172,8 +175,11 @@ export const useStore = create((setStore, getStore) => ({
                 },
                 body: JSON.stringify(body)
             };
-            return fetch(`${ansibleApiUrl}/client/${clientId}`, requestOptions)
-                .then(response => response.json());
+            return get().requestAndNotify(
+                `${ansibleApiUrl}/client/${clientId}`,
+                requestOptions,
+                "Client edited"
+            )
         },
         getWireGuardConfig: clientId => {
             const token = getStore().keycloak.getState().token;
@@ -182,8 +188,10 @@ export const useStore = create((setStore, getStore) => ({
                     "Authorization": `Bearer ${token}`
                 }
             };
-            return fetch(`${ansibleApiUrl}/client/${clientId}/config`, requestOptions)
-                .then(response => response.text());
+            return get().requestAndNotify(
+                `${ansibleApiUrl}/client/${clientId}/config`,
+                requestOptions
+            )
         },
         getPlaybookOutput: taskId => {
             const token = getStore().keycloak.getState().token;
@@ -192,15 +200,20 @@ export const useStore = create((setStore, getStore) => ({
                     "Authorization": `Bearer ${token}`
                 }
             };
-            return fetch(`${ansibleApiUrl}/playbook/${taskId}`, requestOptions)
-                .then(response => response.json());
+            return get().requestAndNotify(
+                `${ansibleApiUrl}/playbook/${taskId}`,
+                requestOptions
+            )
         },
         cancelTask: taskId => {
             const requestOptions = {
                 method: "POST"
             };
-            return fetch(`${flowerApiUrl}/task/revoke/${taskId}?terminate=true`, requestOptions)
-                .then(response => response.json());
+            return get().requestAndNotify(
+                `${flowerApiUrl}/task/revoke/${taskId}?terminate=true`,
+                requestOptions,
+                "Task canceled"
+            )
         },
         deleteClient: clientId => {
             const token = getStore().keycloak.getState().token;
@@ -210,7 +223,65 @@ export const useStore = create((setStore, getStore) => ({
                     "Authorization": `Bearer ${token}`
                 }
             };
-            return fetch(`${ansibleApiUrl}/client/${clientId}`, requestOptions);
+            return get().requestAndNotify(
+                `${ansibleApiUrl}/client/${clientId}`,
+                requestOptions,
+                "Client deleted"
+            )
+        },
+        requestAndNotify: (url, requestOptions, successMessage) => {
+            return new Promise(resolve => {
+                fetch(url, requestOptions)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw response;
+                        }
+                        return response;
+                    })
+                    .then(async response => {
+                        const text = await response.text();
+                        try {
+                            return JSON.parse(text);
+                        } catch (e) {
+                            return text;
+                        }
+                    })
+                    .then(response => {
+                        if (successMessage) {
+                            getStore().notification.getState().addSuccessNotification(successMessage);
+                        }
+                        resolve(response);
+                    })
+                    .catch(async error => {
+                        let message;
+                        try {
+                            let text = await error.text();
+                            message = JSON.parse(text).message;
+                        } catch (e) {
+                            message = error.message;
+                        }
+                        getStore().notification.getState().addErrorNotification(message);
+                    });
+            })
+        },
+    })),
+    notification: create((set, get) => ({
+        open: false,
+        message: "",
+        severity: "success",
+        addNotification: (message, severity) => {
+            set({
+                open: true,
+                message: message,
+                severity: severity
+            })
+        },
+        addSuccessNotification: message => get().addNotification(message, "success"),
+        addErrorNotification: message => get().addNotification(message, "error"),
+        clearNotification: () => {
+            set({
+                open: false
+            })
         },
     })),
 }));
@@ -221,3 +292,4 @@ export const useStoreClientsApplied = (state) => useStore((s) => s.clientsApplie
 export const useStoreClients = (state) => useStore((s) => s.clients(state));
 export const useStoreTasks = (state) => useStore((s) => s.tasks(state));
 export const useStoreApi = (state) => useStore((s) => s.api(state));
+export const useStoreNotification = (state) => useStore((s) => s.notification(state));

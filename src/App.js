@@ -24,6 +24,7 @@ import {useStoreKeycloak, useStoreTasks} from "./store";
 import DialogsComponent from "./components/DialogsComponent";
 import WebsocketComponent from "./components/WebsocketComponent";
 import KeycloakComponent from "./components/KeycloakComponent";
+import SnackbarComponent from "./components/SnackbarComponent";
 
 
 const App = () => {
@@ -64,6 +65,7 @@ const App = () => {
         <React.Fragment>
             <TitleComponent title="frontend" count={countRunningTasks()}/>
             <DialogsComponent/>
+            <SnackbarComponent/>
 
             {
                 !token ?
