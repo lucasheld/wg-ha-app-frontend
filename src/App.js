@@ -34,12 +34,21 @@ const App = () => {
     const tasks = useStoreTasks((state) => state.tasks);
 
     const loadTasks = useStoreTasks((state) => state.loadTasks);
-
-    const [displayComponent, setDisplayComponent] = useState(roles.includes("app-admin") ? <TasksComponent/> : <ClientsComponent/>);
+    const [displayComponent, setDisplayComponent] = useState(<div/>);
 
     useEffect(() => {
         loadTasks();
     }, []);
+
+    useEffect(() => {
+        if (roles) {
+            if (roles.includes("app-admin")) {
+                setDisplayComponent(<TasksComponent/>);
+            } else {
+                setDisplayComponent(<ClientsComponent/>);
+            }
+        }
+    }, [roles]);
 
     const countRunningTasks = () => {
         return tasks.filter(task => !(
