@@ -15,10 +15,8 @@ const KeycloakComponent = () => {
         }).then(authenticated => {
             setKeycloak(keycloak);
             if (authenticated) {
-                let roles = keycloak.realmAccess.roles;
-                setRoles(roles);
-                let token = keycloak.token;
-                setToken(token);
+                setRoles(keycloak.realmAccess.roles);
+                setToken(keycloak.token);
             } else {
                 window.location.reload();
             }
@@ -27,6 +25,7 @@ const KeycloakComponent = () => {
             setInterval(() => {
                 keycloak.updateToken(70).then((refreshed) => {
                     if (refreshed) {
+                        setToken(keycloak.token);
                         console.info("Refreshed Keycloak token");
                     }
                 }).catch(() => {
