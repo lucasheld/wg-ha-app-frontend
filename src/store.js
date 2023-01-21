@@ -187,6 +187,22 @@ export const useStore = create((setStore, getStore) => ({
                 "Client edited"
             )
         },
+        editClientReview: (clientId, body) => {
+            const token = getStore().keycloak.getState().token;
+            const requestOptions = {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(body)
+            };
+            return get().requestAndNotify(
+                `${ansibleApiUrl}/client/${clientId}/review`,
+                requestOptions,
+                "Client edited"
+            )
+        },
         getWireGuardConfig: clientId => {
             const token = getStore().keycloak.getState().token;
             const requestOptions = {

@@ -4,19 +4,19 @@ import {ThumbDown, ThumbUp} from "@mui/icons-material";
 import {useStoreApi, useStoreDialogs} from "../store";
 
 const ReviewComponent = (props) => {
-    const editClient = useStoreApi((state) => state.editClient);
+    const editClientReview = useStoreApi((state) => state.editClientReview);
 
     const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
     const closeDialog = useStoreDialogs((state) => state.closeDialog);
 
     const declineClient = () => {
-        editClient(props.client.id, {
+        editClientReview(props.client.id, {
             "permitted": "DECLINED"
         })
     }
 
     const acceptClient = () => {
-        editClient(props.client.id, {
+        editClientReview(props.client.id, {
             "permitted": "ACCEPTED"
         })
     }
