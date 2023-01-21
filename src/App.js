@@ -155,7 +155,7 @@ const App = () => {
                                     </ListItemButton>
                                 </ListItem>
                                 {
-                                    settings.review &&
+                                    roles.includes("app-admin") && settings.review &&
                                     <ListItem key="reviews" disablePadding>
                                         <ListItemButton
                                             onClick={() => setDisplayComponent(<ReviewsComponent/>)}
