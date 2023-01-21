@@ -266,21 +266,33 @@ export const useStore = create((setStore, getStore) => ({
         },
     })),
     notification: create((set, get) => ({
+        notifications: [],
         open: false,
         message: "",
         severity: "success",
         addNotification: (message, severity) => {
-            set({
+            let notification = {
                 open: true,
                 message: message,
                 severity: severity
+            }
+            set({
+                notifications: [...get().notifications, notification]
             })
         },
         addSuccessNotification: message => get().addNotification(message, "success"),
         addErrorNotification: message => get().addNotification(message, "error"),
-        clearNotification: () => {
+        clearNotification: message => {
             set({
-                open: false
+                notifications: get().notifications.filter(i => i.message !== message)
+            })
+        },
+    })),
+    settings: create((set, get) => ({
+        review: false,
+        setReview: review => {
+            set({
+                review: review
             })
         },
     })),
@@ -293,3 +305,4 @@ export const useStoreClients = (state) => useStore((s) => s.clients(state));
 export const useStoreTasks = (state) => useStore((s) => s.tasks(state));
 export const useStoreApi = (state) => useStore((s) => s.api(state));
 export const useStoreNotification = (state) => useStore((s) => s.notification(state));
+export const useStoreSettings = (state) => useStore((s) => s.settings(state));

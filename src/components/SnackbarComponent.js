@@ -2,30 +2,30 @@ import {useStoreNotification} from "../store";
 import {Alert, Snackbar} from "@mui/material";
 
 const SnackbarComponent = () => {
-    const open = useStoreNotification(state => state.open);
-    const message = useStoreNotification(state => state.message);
-    const severity = useStoreNotification(state => state.severity);
+    const notifications = useStoreNotification(state => state.notifications);
     const clearNotification = useStoreNotification(state => state.clearNotification);
 
     return (
-        <Snackbar
-            anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-            }}
-            open={open}
-            autoHideDuration={6000}
-            onClose={clearNotification}
-        >
-            <Alert
-                onClose={clearNotification}
-                severity={severity}
-                elevation={6}
-                variant="filled"
+        notifications.map(notification =>
+            <Snackbar
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                }}
+                open={notification.open}
+                autoHideDuration={6000}
+                onClose={() => clearNotification(notification.message)}
             >
-                {message}
-            </Alert>
-        </Snackbar>
+                <Alert
+                    onClose={() => clearNotification(notification.message)}
+                    severity={notification.severity}
+                    elevation={6}
+                    variant="filled"
+                >
+                    {notification.message}
+                </Alert>
+            </Snackbar>
+        )
     )
 }
 
