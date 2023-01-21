@@ -10,7 +10,7 @@ const ClientDialog = () => {
     const props = useStoreDialogs((state) => state.props);
     const closeDialog = useStoreDialogs((state) => state.closeDialog);
 
-    const review = useStoreSettings((state) => state.review);
+    const settings = useStoreSettings((state) => state.settings);
 
     const {control, handleSubmit} = useForm({
         defaultValues:
@@ -35,7 +35,7 @@ const ClientDialog = () => {
                 private_key: "",
                 tags: [],
                 services: [],
-                permitted: review ? "PENDING" : "ACCEPTED"
+                permitted: settings.review ? "PENDING" : "ACCEPTED"
             }
     });
 

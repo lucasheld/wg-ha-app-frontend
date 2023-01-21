@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import {Devices, Logout, Memory, Reviews, Settings} from "@mui/icons-material";
 import ClientsComponent from "./components/ClientsComponent";
-import {useStoreClients, useStoreKeycloak, useStoreNotification, useStoreSettings, useStoreTasks} from "./store";
+import {useStoreClients, useStoreDialogs, useStoreKeycloak, useStoreSettings, useStoreTasks} from "./store";
 import DialogsComponent from "./components/DialogsComponent";
 import WebsocketComponent from "./components/WebsocketComponent";
 import KeycloakComponent from "./components/KeycloakComponent";
@@ -37,12 +37,12 @@ const App = () => {
     const loadTasks = useStoreTasks((state) => state.loadTasks);
     const [displayComponent, setDisplayComponent] = useState(<div/>);
 
-    const addSuccessNotification = useStoreNotification(state => state.addSuccessNotification);
-    const review = useStoreSettings(state => state.review);
-    const setReview = useStoreSettings(state => state.setReview);
+    const settings = useStoreSettings(state => state.settings);
 
     const clients = useStoreClients((state) => state.clients);
     const reviewClients = clients.filter(client => client.permitted === "PENDING");
+
+    const openSettingsDialog = useStoreDialogs((state) => state.openSettingsDialog);
 
     useEffect(() => {
         loadTasks();
@@ -93,8 +93,7 @@ const App = () => {
                                 roles.includes("app-admin") &&
                                 <IconButton
                                     onClick={() => {
-                                        setReview(!review);
-                                        addSuccessNotification(`Review ${!review ? "enabled" : "disabled"}`);
+                                        openSettingsDialog();
                                     }}
                                     color="inherit"
                                 >
@@ -156,7 +155,7 @@ const App = () => {
                                     </ListItemButton>
                                 </ListItem>
                                 {
-                                    review &&
+                                    settings.review &&
                                     <ListItem key="reviews" disablePadding>
                                         <ListItemButton
                                             onClick={() => setDisplayComponent(<ReviewsComponent/>)}

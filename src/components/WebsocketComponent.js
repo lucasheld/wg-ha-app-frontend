@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 import io from "socket.io-client";
-import {useStoreClients, useStoreClientsApplied, useStoreKeycloak, useStoreTasks} from "../store";
+import {useStoreClients, useStoreClientsApplied, useStoreKeycloak, useStoreSettings, useStoreTasks} from "../store";
 
 const WebsocketComponent = () => {
     const setClients = useStoreClients((state) => state.setClients);
@@ -9,6 +9,8 @@ const WebsocketComponent = () => {
     const deleteClient = useStoreClients((state) => state.deleteClient);
 
     const setClientsApplied = useStoreClientsApplied((state) => state.setClientsApplied);
+
+    const setSettings = useStoreSettings((state) => state.setSettings);
 
     const addOrEditTask = useStoreTasks((state) => state.addOrEditTask);
     const editTaskOutput = useStoreTasks((state) => state.editTaskOutput);
@@ -53,6 +55,11 @@ const WebsocketComponent = () => {
         });
 
 
+        socket.on("setSettings", r => {
+            setSettings(r);
+        });
+
+
         [
             "task-sent",
             "task-received",
@@ -72,6 +79,7 @@ const WebsocketComponent = () => {
             editTaskOutput(r);
         })
 
+
         socket.onAny((event, data) => {
             console.log({event, data})
         })
@@ -85,6 +93,7 @@ const WebsocketComponent = () => {
                 "editClient",
                 "deleteClient",
                 "setClientsApplied",
+                "setSettings",
                 "task-sent",
                 "task-received",
                 "task-started",

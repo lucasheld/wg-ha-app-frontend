@@ -1,5 +1,10 @@
 import create from "zustand";
-import {CLIENT_DIALOG, CONFIRMATION_DIALOG, WIREGUARD_CONFIG_DIALOG} from "./components/DialogsComponent";
+import {
+    CLIENT_DIALOG,
+    CONFIRMATION_DIALOG,
+    SETTINGS_DIALOG,
+    WIREGUARD_CONFIG_DIALOG
+} from "./components/DialogsComponent";
 import {ansibleApiUrl, flowerApiUrl} from "./utils";
 
 const sortTasks = tasks => {
@@ -46,6 +51,7 @@ export const useStore = create((setStore, getStore) => ({
         openConfirmationDialog: (props) => get().openDialog(CONFIRMATION_DIALOG, props),
         openClientDialog: (props) => get().openDialog(CLIENT_DIALOG, props),
         openWireGuardConfigDialog: (props) => get().openDialog(WIREGUARD_CONFIG_DIALOG, props),
+        openSettingsDialog: (props) => get().openDialog(SETTINGS_DIALOG, props),
         closeDialog: () => {
             set({
                 open: false,
@@ -264,6 +270,22 @@ export const useStore = create((setStore, getStore) => ({
                     });
             })
         },
+        setSettings: body => {
+            const token = getStore().keycloak.getState().token;
+            const requestOptions = {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(body)
+            };
+            return get().requestAndNotify(
+                `${ansibleApiUrl}/settings`,
+                requestOptions,
+                "Settings edited"
+            )
+        },
     })),
     notification: create((set, get) => ({
         notifications: [],
@@ -288,11 +310,13 @@ export const useStore = create((setStore, getStore) => ({
             })
         },
     })),
-    settings: create((set, get) => ({
-        review: false,
-        setReview: review => {
+    settings: create(set => ({
+        settings: {
+            review: false
+        },
+        setSettings: settings => {
             set({
-                review: review
+                settings: settings
             })
         },
     })),
