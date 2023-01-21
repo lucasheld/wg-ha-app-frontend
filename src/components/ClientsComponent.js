@@ -33,7 +33,7 @@ const ClientsComponent = () => {
                     </Paper>
             }
 
-            <Tooltip title="Add Client" aria-label="add client">
+            <Tooltip title="Add Client">
                 <Fab
                     color="primary"
                     sx={{
@@ -43,6 +43,7 @@ const ClientsComponent = () => {
                     }}
                     onClick={() => {
                         openClientDialog({
+                            title: "Add client",
                             handleOk: async (body) => {
                                 await addClient(body);
                             }

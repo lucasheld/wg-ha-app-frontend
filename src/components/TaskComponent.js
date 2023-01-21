@@ -44,7 +44,6 @@ const TaskComponent = ({task}) => {
                         <Tooltip
                             title="cancel task">
                             <IconButton
-                                aria-label="cancel task"
                                 onClick={e => {
                                     e.preventDefault();
                                     cancelTask(task.uuid);

@@ -3,7 +3,7 @@ import React from "react";
 import MultiChipInputComponent from "./MultiChipInputComponent";
 import {Add, Delete} from "@mui/icons-material";
 
-const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value, id, title}, ref) => {
+const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value, id, title, disabled}, ref) => {
     const generateNewRule = () => {
         return {
             "protocol": "",
@@ -77,6 +77,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                                         }))
                                                         onChange(newServices);
                                                     }}
+                                                    disabled={disabled}
                                                 >
                                                     <MenuItem value="all">all</MenuItem>
                                                     <MenuItem value="tcp">tcp</MenuItem>
@@ -113,6 +114,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                                     id={`${serviceIndex}${ruleIndex}-ports`}
                                                     title="Ports"
                                                     key={`${serviceIndex}${ruleIndex}-ports`}
+                                                    disabled={disabled}
                                                 />
                                             </Grid>
                                         }
@@ -122,7 +124,6 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                                 <Grid container justifyContent="center">
                                                     <IconButton
                                                         color="error"
-                                                        aria-label="delete"
                                                         onClick={() => {
                                                             let newServices = value.map(s => ({
                                                                 ...s,
@@ -132,6 +133,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                                             }))
                                                             onChange(newServices);
                                                         }}
+                                                        disabled={disabled}
                                                     >
                                                         <Delete/>
                                                     </IconButton>
@@ -154,6 +156,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                 }}
                                 variant="outlined"
                                 startIcon={<Add/>}
+                                disabled={disabled}
                             >
                                 Add Rule
                             </Button>
@@ -171,6 +174,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                 id={`${serviceIndex}-allowedTags`}
                                 title="Allowed tags"
                                 key={`${serviceIndex}-allowedTags`}
+                                disabled={disabled}
                             />
                         </Box>
                         <Box mt={1}>
@@ -183,6 +187,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                     variant="outlined"
                                     color="error"
                                     startIcon={<Delete/>}
+                                    disabled={disabled}
                                 >
                                     Remove Service
                                 </Button>
@@ -203,6 +208,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                     }}
                     variant="outlined"
                     startIcon={<Add/>}
+                    disabled={disabled}
                 >
                     Add Service
                 </Button>

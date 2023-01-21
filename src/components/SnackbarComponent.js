@@ -7,7 +7,9 @@ const SnackbarComponent = () => {
 
     return (
         notifications.map(notification =>
+            notification.open &&
             <Snackbar
+                key={notification.message}
                 anchorOrigin={{
                     vertical: "bottom",
                     horizontal: "left",

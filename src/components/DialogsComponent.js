@@ -1,6 +1,6 @@
 import ConfirmationDialog from "./ConfirmationDialog";
 import {useStoreDialogs} from "../store";
-import AddClientDialog from "./AddClientDialog";
+import ClientDialog from "./ClientDialog";
 import WireGuardConfigDialog from "./WireGuardConfigDialog";
 
 export const CONFIRMATION_DIALOG = "CONFIRMATION_DIALOG";
@@ -14,7 +14,7 @@ const DialogsComponent = () => {
         case CONFIRMATION_DIALOG:
             return <ConfirmationDialog/>;
         case CLIENT_DIALOG:
-            return <AddClientDialog/>;
+            return <ClientDialog/>;
         case WIREGUARD_CONFIG_DIALOG:
             return <WireGuardConfigDialog/>
         default:

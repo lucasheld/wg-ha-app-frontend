@@ -9,7 +9,7 @@ import {
     ListItemText,
     Tooltip
 } from "@mui/material";
-import {Delete, Done, Edit} from "@mui/icons-material";
+import {Close, Delete, Done, Edit} from "@mui/icons-material";
 import {useStoreApi, useStoreClients, useStoreClientsApplied, useStoreDialogs} from "../store";
 
 const ClientComponent = (props) => {
@@ -25,8 +25,7 @@ const ClientComponent = (props) => {
     const deleteClient = useStoreApi((state) => state.deleteClient);
 
     const clientAndClientAppliedMatch = () => {
-        // compare client and clientApplied and ignore id
-
+        // compare client and clientApplied and ignore id, title values
         const client = {
             ...clients.find(client => client.public_key === props.client.public_key),
             id: null,
@@ -58,13 +57,12 @@ const ClientComponent = (props) => {
                         <React.Fragment>
                             <Tooltip
                                 title="Edit client"
-                                aria-label="edit client"
                             >
                                 <IconButton
                                     edge="end"
-                                    aria-label="edit"
                                     onClick={() => {
                                         openClientDialog({
+                                            title: "Edit client",
                                             client: props.client,
                                             handleOk: async (body) => {
                                                 await editClient(props.client.id, body);
@@ -77,11 +75,9 @@ const ClientComponent = (props) => {
                             </Tooltip>
                             <Tooltip
                                 title="Delete client"
-                                aria-label="delete client"
                             >
                                 <IconButton
                                     edge="end"
-                                    aria-label="delete"
                                     onClick={() => {
                                         openConfirmationDialog({
                                             title: "Delete client",
@@ -105,9 +101,23 @@ const ClientComponent = (props) => {
                     >
                         <ListItemIcon>
                             {
-                                clientApplied ?
-                                    <Done/> :
-                                    <CircularProgress size={24}/>
+                                props.client.permitted === "DECLINED" ?
+                                    <Tooltip
+                                        title="Client declined"
+                                    >
+                                        <Close/>
+                                    </Tooltip> :
+                                    clientApplied ?
+                                        <Tooltip
+                                            title={`Client ready to use`}
+                                        >
+                                            <Done/>
+                                        </Tooltip> :
+                                        <Tooltip
+                                            title={`${props.client.permitted === "PENDING" ? "Client review pending" : "Client is being configured"}`}
+                                        >
+                                            <CircularProgress size={24}/>
+                                        </Tooltip>
                             }
                         </ListItemIcon>
                         <ListItemText

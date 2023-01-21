@@ -63,16 +63,14 @@ const WireGuardConfigDialog = () => {
                 </DialogTitle>
                 <DialogContent dividers>
                     <Grid container>
-                        <ButtonGroup variant="contained" aria-label="switch mode">
+                        <ButtonGroup variant="contained">
                             <IconButton
-                                aria-label="text"
                                 onClick={() => setMode(modeEnum.TEXT)}
                                 disabled={mode === modeEnum.TEXT}
                             >
                                 <TextSnippet/>
                             </IconButton>
                             <IconButton
-                                aria-label="qr code"
                                 onClick={() => setMode(modeEnum.QR)}
                                 disabled={mode === modeEnum.QR}
                             >
@@ -93,7 +91,6 @@ const WireGuardConfigDialog = () => {
                             />
                             <Box mt={1}>
                                 <Button
-                                    aria-label="download"
                                     variant="contained"
                                     startIcon={<Download/>}
                                     onClick={() => {

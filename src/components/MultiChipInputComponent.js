@@ -4,7 +4,7 @@ import Autocomplete, {createFilterOptions} from "@mui/material/Autocomplete";
 
 const filter = createFilterOptions();
 
-const MultiChipInputComponent = React.forwardRef(({ onChange, name, label, value, id, title}, ref) => {
+const MultiChipInputComponent = React.forwardRef(({ onChange, name, label, value, id, title, disabled}, ref) => {
     const [options, setOptions] = useState([]);
 
     // const tags = useStoreTags((state) => state.tags);
@@ -86,6 +86,7 @@ const MultiChipInputComponent = React.forwardRef(({ onChange, name, label, value
                     label={title}
                 />
             )}
+            disabled={disabled}
         />
     );
 });

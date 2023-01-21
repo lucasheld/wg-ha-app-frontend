@@ -22,11 +22,9 @@ const UserComponent = (props) => {
                         <React.Fragment>
                             <Tooltip
                                 title="Edit user"
-                                aria-label="edit user"
                             >
                                 <IconButton
                                     edge="end"
-                                    aria-label="edit"
                                     onClick={() => {
                                         openUserDialog({
                                             user: props.user,
@@ -42,11 +40,9 @@ const UserComponent = (props) => {
                             </Tooltip>
                             <Tooltip
                                 title="Delete user"
-                                aria-label="delete user"
                             >
                                 <IconButton
                                     edge="end"
-                                    aria-label="delete"
                                     onClick={() => {
                                         openConfirmationDialog({
                                             title: "Delete user",

@@ -2,13 +2,15 @@ import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider,
 import {useRef} from "react";
 import MultiChipInputComponent from "./MultiChipInputComponent";
 import SelectServicesComponent from "./SelectServicesComponent";
-import {useStoreDialogs} from "../store";
+import {useStoreDialogs, useStoreSettings} from "../store";
 import {Controller, useForm} from "react-hook-form";
 
-const AddClientDialog = () => {
+const ClientDialog = () => {
     const open = useStoreDialogs((state) => state.open);
     const props = useStoreDialogs((state) => state.props);
     const closeDialog = useStoreDialogs((state) => state.closeDialog);
+
+    const review = useStoreSettings((state) => state.review);
 
     const {control, handleSubmit} = useForm({
         defaultValues:
@@ -33,6 +35,7 @@ const AddClientDialog = () => {
                 private_key: "",
                 tags: [],
                 services: [],
+                permitted: review ? "PENDING" : "ACCEPTED"
             }
     });
 
@@ -51,7 +54,7 @@ const AddClientDialog = () => {
         >
             <form ref={formRef} onSubmit={handleSubmit(onSubmit)}>
                 <DialogTitle id="alert-dialog-title">
-                    Add Client
+                    {props.title}
                 </DialogTitle>
                 <DialogContent dividers>
                     <Controller
@@ -66,6 +69,7 @@ const AddClientDialog = () => {
                                 label="Title"
                                 type="text"
                                 fullWidth
+                                disabled={props.disabled}
                             />
                         )}
                     />
@@ -80,6 +84,7 @@ const AddClientDialog = () => {
                                 label="Private Key"
                                 type="text"
                                 fullWidth
+                                disabled={props.disabled}
                             />
                         )}
                     />
@@ -91,6 +96,7 @@ const AddClientDialog = () => {
                                 {...field}
                                 id="tags"
                                 title="Tags"
+                                disabled={props.disabled}
                             />
                         )}
                     />
@@ -103,6 +109,7 @@ const AddClientDialog = () => {
                         render={({ field }) => (
                             <SelectServicesComponent
                                 {...field}
+                                disabled={props.disabled}
                             />
                         )}
                     />
@@ -114,16 +121,20 @@ const AddClientDialog = () => {
                     >
                         Cancel
                     </Button>
-                    <Button
-                        color="primary"
-                        type="submit"
-                    >
-                        Ok
-                    </Button>
+                    {
+                        props.customDialogActions ?
+                            props.customDialogActions :
+                            <Button
+                                color="primary"
+                                type="submit"
+                            >
+                                Ok
+                            </Button>
+                    }
                 </DialogActions>
             </form>
         </Dialog>
     );
 };
 
-export default AddClientDialog;
+export default ClientDialog;

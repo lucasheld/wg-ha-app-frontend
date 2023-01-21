@@ -33,7 +33,7 @@ const UsersComponent = () => {
                     </Paper>
             }
 
-            <Tooltip title="Add User" aria-label="add user">
+            <Tooltip title="Add User">
                 <Fab
                     color="primary"
                     sx={{
