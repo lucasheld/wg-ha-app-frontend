@@ -34,8 +34,7 @@ const ClientDialog = () => {
                 title: "",
                 private_key: "",
                 tags: [],
-                services: [],
-                permitted: settings.review ? "PENDING" : "ACCEPTED"
+                services: []
             }
     });
 

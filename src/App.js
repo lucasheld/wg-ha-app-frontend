@@ -70,7 +70,7 @@ const App = () => {
 
     return (
         <React.Fragment>
-            <TitleComponent title="frontend" count={countRunningTasks()}/>
+            <TitleComponent title="frontend"/>
             <DialogsComponent/>
             <SnackbarComponent/>
 

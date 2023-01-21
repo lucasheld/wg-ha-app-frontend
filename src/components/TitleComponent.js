@@ -1,11 +1,6 @@
 import {Helmet, HelmetProvider} from "react-helmet-async";
 
-const TitleComponent = (props) => {
-    let title = props.title;
-    if (props.count > 0) {
-        title = `[${props.count}] ${props.title}`;
-    }
-
+const TitleComponent = ({title}) => {
     return (
         <HelmetProvider>
             <Helmet>
