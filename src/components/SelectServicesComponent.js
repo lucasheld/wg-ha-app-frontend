@@ -3,13 +3,13 @@ import React from "react";
 import MultiChipInputComponent from "./MultiChipInputComponent";
 import {Add, Delete} from "@mui/icons-material";
 
-const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value, id, title, disabled}, ref) => {
+const SelectServicesComponent = React.forwardRef(({onChange, name, label, value, id, title, disabled}, ref) => {
     const generateNewRule = () => {
         return {
             "protocol": "",
             "ports": []
-        }
-    }
+        };
+    };
 
     const generateNewService = () => {
         let rule = generateNewRule();
@@ -18,8 +18,8 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                 rule
             ],
             "allowed_tags": []
-        }
-    }
+        };
+    };
 
     return (
         <React.Fragment>
@@ -74,7 +74,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                                                         r.ports
                                                                 })) :
                                                                 s.rules
-                                                        }))
+                                                        }));
                                                         onChange(newServices);
                                                     }}
                                                     disabled={disabled}
@@ -108,7 +108,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                                                         r.ports
                                                                 })) :
                                                                 s.rules
-                                                        }))
+                                                        }));
                                                         onChange(newServices);
                                                     }}
                                                     id={`${serviceIndex}${ruleIndex}-ports`}
@@ -130,7 +130,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                                                 rules: service === s ?
                                                                     s.rules.filter(item => item !== rule) :
                                                                     s.rules
-                                                            }))
+                                                            }));
                                                             onChange(newServices);
                                                         }}
                                                         disabled={disabled}
@@ -141,7 +141,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                             </Grid>
                                         }
                                     </Grid>
-                                )
+                                );
                             })
                         }
                         <Box mt={1}>
@@ -150,8 +150,8 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                     let rule = generateNewRule();
                                     let newServices = value.map(s => ({
                                         ...s,
-                                        rules: service === s ? [...s.rules, rule]: s.rules
-                                    }))
+                                        rules: service === s ? [...s.rules, rule] : s.rules
+                                    }));
                                     onChange(newServices);
                                 }}
                                 variant="outlined"
@@ -167,8 +167,8 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                                 onChange={allowed_tags => {
                                     let newServices = value.map(s => ({
                                         ...s,
-                                        allowed_tags: service === s ? allowed_tags: s.allowed_tags
-                                    }))
+                                        allowed_tags: service === s ? allowed_tags : s.allowed_tags
+                                    }));
                                     onChange(newServices);
                                 }}
                                 id={`${serviceIndex}-allowedTags`}
@@ -203,7 +203,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
                 <Button
                     onClick={() => {
                         let service = generateNewService();
-                        let newServices = [...value, service]
+                        let newServices = [...value, service];
                         onChange(newServices);
                     }}
                     variant="outlined"
@@ -215,7 +215,7 @@ const SelectServicesComponent = React.forwardRef(({ onChange, name, label, value
             </Box>
         </React.Fragment>
 
-    )
+    );
 });
 
 export default SelectServicesComponent;

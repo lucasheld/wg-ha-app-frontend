@@ -72,17 +72,17 @@ const WebsocketComponent = () => {
         ].forEach(e => {
             socket.on(e, r => {
                 addOrEditTask(r);
-            })
-        })
+            });
+        });
 
         socket.on("task-progress", r => {
             editTaskOutput(r);
-        })
+        });
 
 
         socket.onAny((event, data) => {
-            console.log({event, data})
-        })
+            console.log({event, data});
+        });
 
         return () => {
             [
@@ -104,8 +104,8 @@ const WebsocketComponent = () => {
                 "task-retried",
                 "task-progress",
             ].forEach(e => {
-                socket.off(e)
-            })
+                socket.off(e);
+            });
 
             socket.offAny();
         };

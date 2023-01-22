@@ -1,7 +1,8 @@
 import React from "react";
 import {Button, IconButton, List, ListItem, ListItemButton, ListItemText, Tooltip} from "@mui/material";
 import {ThumbDown, ThumbUp} from "@mui/icons-material";
-import {useStoreApi, useStoreDialogs} from "../store";
+import {useStoreApi, useStoreDialogs, useStoreKeycloak} from "../store";
+import {userNameById} from "../utils";
 
 const ReviewComponent = (props) => {
     const editClientReview = useStoreApi((state) => state.editClientReview);
@@ -9,17 +10,19 @@ const ReviewComponent = (props) => {
     const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
     const closeDialog = useStoreDialogs((state) => state.closeDialog);
 
+    const users = useStoreKeycloak((state) => state.users);
+
     const declineClient = () => {
         editClientReview(props.client.id, {
             "permitted": "DECLINED"
-        })
-    }
+        });
+    };
 
     const acceptClient = () => {
         editClientReview(props.client.id, {
             "permitted": "ACCEPTED"
-        })
-    }
+        });
+    };
 
     return (
         <React.Fragment>
@@ -37,7 +40,7 @@ const ReviewComponent = (props) => {
                                 <IconButton
                                     edge="end"
                                     onClick={() => {
-                                        declineClient()
+                                        declineClient();
                                     }}
                                 >
                                     <ThumbDown/>
@@ -92,6 +95,7 @@ const ReviewComponent = (props) => {
                         <ListItemText
                             id={`label-${props.client.id}`}
                             primary={props.client.title}
+                            secondary={`Owner: ${userNameById(users, props.client.user_id)}`}
                         />
                     </ListItemButton>
                 </ListItem>

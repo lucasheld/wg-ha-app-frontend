@@ -28,7 +28,7 @@ const SnackbarComponent = () => {
                 </Alert>
             </Snackbar>
         )
-    )
-}
+    );
+};
 
 export default SnackbarComponent;

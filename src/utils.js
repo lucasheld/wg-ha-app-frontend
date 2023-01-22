@@ -7,4 +7,14 @@ export const parseTaskDatetime = task => {
     let date = dateObj.toLocaleDateString(locale);
     let time = dateObj.toLocaleTimeString(locale);
     return `${date} ${time}`;
-}
+};
+
+export const userNameById = (users, userId) => {
+    for (const usersKey in users) {
+        const user = users[usersKey];
+        if (user.id === userId) {
+            return user.username;
+        }
+    }
+    return userId;
+};

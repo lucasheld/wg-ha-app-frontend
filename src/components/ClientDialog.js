@@ -15,35 +15,35 @@ const ClientDialog = () => {
     const {control, handleSubmit} = useForm({
         defaultValues:
             props.client ?
-            {
-                ...props.client,
-                services: props.client.services.map(service => ({
-                    ...service,
-                    rules: service.rules ?
-                        service.rules.map(rule => ({
-                            ...rule,
-                            ports: rule.ports ?
-                                rule.ports.map(port => port.toString())
-                                : []
-                        }))
-                        : [],
-                    allowed_tags: service.allowed_tags ? service.allowed_tags : []
-                }))
-            } :
-            {
-                title: "",
-                private_key: "",
-                tags: [],
-                services: []
-            }
+                {
+                    ...props.client,
+                    services: props.client.services.map(service => ({
+                        ...service,
+                        rules: service.rules ?
+                            service.rules.map(rule => ({
+                                ...rule,
+                                ports: rule.ports ?
+                                    rule.ports.map(port => port.toString())
+                                    : []
+                            }))
+                            : [],
+                        allowed_tags: service.allowed_tags ? service.allowed_tags : []
+                    }))
+                } :
+                {
+                    title: "",
+                    private_key: "",
+                    tags: [],
+                    services: []
+                }
     });
 
     const onSubmit = data => {
         props.handleOk(data);
         closeDialog();
-    }
+    };
 
-    const formRef = useRef(null)
+    const formRef = useRef(null);
 
     return (
         <Dialog
@@ -59,7 +59,7 @@ const ClientDialog = () => {
                     <Controller
                         name="title"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <TextField
                                 {...field}
                                 required
@@ -75,7 +75,7 @@ const ClientDialog = () => {
                     <Controller
                         name="private_key"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <TextField
                                 {...field}
                                 required
@@ -90,7 +90,7 @@ const ClientDialog = () => {
                     <Controller
                         name="tags"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <MultiChipInputComponent
                                 {...field}
                                 id="tags"
@@ -105,7 +105,7 @@ const ClientDialog = () => {
                     <Controller
                         name="services"
                         control={control}
-                        render={({ field }) => (
+                        render={({field}) => (
                             <SelectServicesComponent
                                 {...field}
                                 disabled={props.disabled}

@@ -48,7 +48,7 @@ const UserComponent = (props) => {
                                             title: "Delete user",
                                             content: `Are you sure you want to delete the user "${props.user.username}"?`,
                                             handleOk: () => deleteUser(props.user.id)
-                                        })
+                                        });
                                     }}
                                 >
                                     <Delete/>
@@ -72,6 +72,6 @@ const UserComponent = (props) => {
             </List>
         </React.Fragment>
     );
-}
+};
 
 export default UserComponent;

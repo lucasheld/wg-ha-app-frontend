@@ -10,7 +10,8 @@ import {
     Tooltip
 } from "@mui/material";
 import {Close, Delete, Done, Edit} from "@mui/icons-material";
-import {useStoreApi, useStoreClients, useStoreClientsApplied, useStoreDialogs} from "../store";
+import {useStoreApi, useStoreClients, useStoreClientsApplied, useStoreDialogs, useStoreKeycloak} from "../store";
+import {userNameById} from "../utils";
 
 const ClientComponent = (props) => {
     const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
@@ -23,6 +24,8 @@ const ClientComponent = (props) => {
 
     const editClient = useStoreApi((state) => state.editClient);
     const deleteClient = useStoreApi((state) => state.deleteClient);
+
+    const users = useStoreKeycloak((state) => state.users);
 
     const clientAndClientAppliedMatch = () => {
         // compare client and clientApplied and ignore id, title values
@@ -41,7 +44,7 @@ const ClientComponent = (props) => {
         let clientAppliedJson = JSON.stringify(clientApplied, Object.keys(clientApplied).sort());
 
         return clientJson === clientAppliedJson;
-    }
+    };
 
     const clientApplied = clientAndClientAppliedMatch();
 
@@ -83,7 +86,7 @@ const ClientComponent = (props) => {
                                             title: "Delete client",
                                             content: `Are you sure you want to delete the client "${props.client.title}"?`,
                                             handleOk: () => deleteClient(props.client.id)
-                                        })
+                                        });
                                     }}
                                 >
                                     <Delete/>
@@ -96,7 +99,7 @@ const ClientComponent = (props) => {
                         onClick={() => {
                             openWireGuardConfigDialog({
                                 client: props.client
-                            })
+                            });
                         }}
                     >
                         <ListItemIcon>
@@ -123,6 +126,7 @@ const ClientComponent = (props) => {
                         <ListItemText
                             id={`label-${props.client.id}`}
                             primary={props.client.title}
+                            secondary={props.mode === "all" && `Owner: ${userNameById(users, props.client.user_id)}`}
                         />
                     </ListItemButton>
                 </ListItem>

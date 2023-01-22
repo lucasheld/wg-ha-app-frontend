@@ -18,12 +18,12 @@ const DialogsComponent = () => {
         case CLIENT_DIALOG:
             return <ClientDialog/>;
         case WIREGUARD_CONFIG_DIALOG:
-            return <WireGuardConfigDialog/>
+            return <WireGuardConfigDialog/>;
         case SETTINGS_DIALOG:
-            return <SettingsDialog/>
+            return <SettingsDialog/>;
         default:
             return null;
     }
-}
+};
 
 export default DialogsComponent;

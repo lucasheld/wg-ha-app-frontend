@@ -76,111 +76,138 @@ const App = () => {
 
             {
                 !token ?
-                <KeycloakComponent/> :
-                <Box sx={{display: "flex"}}>
-                    <CssBaseline/>
-                    <AppBar position="fixed" sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
-                        <Toolbar>
-                            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                                frontend
-                            </Typography>
-                            <span style={{marginRight: "20px"}}>
+                    <KeycloakComponent/> :
+                    <Box sx={{display: "flex"}}>
+                        <CssBaseline/>
+                        <AppBar position="fixed" sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
+                            <Toolbar>
+                                <Typography variant="h6" noWrap component="div" sx={{flexGrow: 1}}>
+                                    frontend
+                                </Typography>
+                                <span style={{marginRight: "20px"}}>
                                 {
                                     roles.includes("app-admin") ? "admin" : "user"
                                 }
                             </span>
-                            {
-                                roles.includes("app-admin") &&
-                                <IconButton
-                                    onClick={() => {
-                                        openSettingsDialog();
-                                    }}
-                                    color="inherit"
-                                >
-                                    <Settings/>
-                                </IconButton>
-                            }
-                            <Tooltip
-                                title="Logout"
-                            >
-                                <IconButton
-                                    edge="end"
-                                    color="inherit"
-                                    onClick={() => {
-                                        logout();
-                                    }}
-                                >
-                                    <Logout/>
-                                </IconButton>
-                            </Tooltip>
-                        </Toolbar>
-                    </AppBar>
-                    <Drawer
-                        variant="permanent"
-                        sx={{
-                            width: drawerWidth,
-                            flexShrink: 0,
-                            [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: "border-box"},
-                        }}
-                    >
-                        <Toolbar/>
-                        <Box sx={{overflow: "auto"}}>
-                            <List>
                                 {
                                     roles.includes("app-admin") &&
-                                    <ListItem key="tasks" disablePadding>
-                                        <ListItemButton
-                                            onClick={() => setDisplayComponent(<TasksComponent/>)}
-                                        >
-                                            <ListItemIcon>
-                                                <Badge
-                                                    badgeContent={countRunningTasks()}
-                                                    color="primary"
-                                                >
-                                                    <Memory/>
-                                                </Badge>
-                                            </ListItemIcon>
-                                            <ListItemText primary="Tasks"/>
-                                        </ListItemButton>
-                                    </ListItem>
-                                }
-                                <ListItem key="clients" disablePadding>
-                                    <ListItemButton
-                                        onClick={() => setDisplayComponent(<ClientsComponent/>)}
+                                    <IconButton
+                                        onClick={() => {
+                                            openSettingsDialog();
+                                        }}
+                                        color="inherit"
                                     >
-                                        <ListItemIcon>
-                                            <Devices/>
-                                        </ListItemIcon>
-                                        <ListItemText primary="Clients"/>
-                                    </ListItemButton>
-                                </ListItem>
-                                {
-                                    roles.includes("app-admin") && settings.review &&
-                                    <ListItem key="reviews" disablePadding>
-                                        <ListItemButton
-                                            onClick={() => setDisplayComponent(<ReviewsComponent/>)}
-                                        >
-                                            <ListItemIcon>
-                                                <Badge badgeContent={reviewClients.length} color="primary">
-                                                    <Reviews/>
-                                                </Badge>
-                                            </ListItemIcon>
-                                            <ListItemText primary="Reviews"/>
-                                        </ListItemButton>
-                                    </ListItem>
+                                        <Settings/>
+                                    </IconButton>
                                 }
-                            </List>
+                                <Tooltip
+                                    title="Logout"
+                                >
+                                    <IconButton
+                                        edge="end"
+                                        color="inherit"
+                                        onClick={() => {
+                                            logout();
+                                        }}
+                                    >
+                                        <Logout/>
+                                    </IconButton>
+                                </Tooltip>
+                            </Toolbar>
+                        </AppBar>
+                        <Drawer
+                            variant="permanent"
+                            sx={{
+                                width: drawerWidth,
+                                flexShrink: 0,
+                                [`& .MuiDrawer-paper`]: {width: drawerWidth, boxSizing: "border-box"},
+                            }}
+                        >
+                            <Toolbar/>
+                            <Box sx={{overflow: "auto"}}>
+                                <List>
+                                    {
+                                        roles.includes("app-admin") &&
+                                        <ListItem key="tasks" disablePadding>
+                                            <ListItemButton
+                                                onClick={() => setDisplayComponent(<TasksComponent/>)}
+                                            >
+                                                <ListItemIcon>
+                                                    <Badge
+                                                        badgeContent={countRunningTasks()}
+                                                        color="primary"
+                                                    >
+                                                        <Memory/>
+                                                    </Badge>
+                                                </ListItemIcon>
+                                                <ListItemText primary="Tasks"/>
+                                            </ListItemButton>
+                                        </ListItem>
+                                    }
+                                    {
+                                        roles.includes("app-admin") ?
+                                            <div>
+                                                <ListItem key="ownClients" disablePadding>
+                                                    <ListItemButton
+                                                        onClick={() => setDisplayComponent(<ClientsComponent/>)}
+                                                    >
+                                                        <ListItemIcon>
+                                                            <Devices/>
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="Own clients"/>
+                                                    </ListItemButton>
+                                                </ListItem>
+                                                <ListItem key="allClients" disablePadding>
+                                                    <ListItemButton
+                                                        onClick={() => setDisplayComponent(<ClientsComponent
+                                                            mode="all"/>)}
+                                                    >
+                                                        <ListItemIcon>
+                                                            <Devices/>
+                                                        </ListItemIcon>
+                                                        <ListItemText primary="All clients"/>
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            </div>
+                                            :
+                                            <ListItem key="clients" disablePadding>
+                                                <ListItemButton
+                                                    onClick={() => setDisplayComponent(<ClientsComponent/>)}
+                                                >
+                                                    <ListItemIcon>
+                                                        <Devices/>
+                                                    </ListItemIcon>
+                                                    <ListItemText primary="Clients"/>
+                                                </ListItemButton>
+                                            </ListItem>
+                                    }
+                                    {
+                                        roles.includes("app-admin") && settings.review &&
+                                        <ListItem key="reviews" disablePadding>
+                                            <ListItemButton
+                                                onClick={() => setDisplayComponent(<ReviewsComponent/>)}
+                                            >
+                                                <ListItemIcon>
+                                                    <Badge badgeContent={reviewClients.length} color="primary">
+                                                        <Reviews/>
+                                                    </Badge>
+                                                </ListItemIcon>
+                                                <ListItemText primary="Reviews"/>
+                                            </ListItemButton>
+                                        </ListItem>
+                                    }
+                                </List>
+                            </Box>
+                        </Drawer>
+                        <Box component="main" sx={{flexGrow: 1, p: 3}}>
+                            <Toolbar/>
+                            {
+                                token &&
+                                <WebsocketComponent/>
+                            }
+                            {displayComponent}
                         </Box>
-                    </Drawer>
-                    <Box component="main" sx={{flexGrow: 1, p: 3}}>
-                        <Toolbar/>
-                        {
-                            token &&
-                            <WebsocketComponent/>
-                        }
-                        {displayComponent}
                     </Box>
-                </Box>
             }
         </React.Fragment>
     );

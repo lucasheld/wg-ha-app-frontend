@@ -7,6 +7,8 @@ const KeycloakComponent = () => {
     const setKeycloak = useStoreKeycloak((state) => state.setKeycloak);
     const setToken = useStoreKeycloak((state) => state.setToken);
     const setRoles = useStoreKeycloak((state) => state.setRoles);
+    const setUserId = useStoreKeycloak((state) => state.setUserId);
+    const loadUsers = useStoreKeycloak((state) => state.loadUsers);
 
     useEffect(() => {
         const keycloak = new Keycloak("/keycloak.json");
@@ -15,8 +17,10 @@ const KeycloakComponent = () => {
         }).then(authenticated => {
             setKeycloak(keycloak);
             if (authenticated) {
+                setUserId(keycloak.subject);
                 setRoles(keycloak.realmAccess.roles);
                 setToken(keycloak.token);
+                loadUsers();
             } else {
                 window.location.reload();
             }
@@ -29,10 +33,10 @@ const KeycloakComponent = () => {
                         console.info("Refreshed Keycloak token");
                     }
                 }).catch(() => {
-                    console.error('Failed to refresh Keycloak token');
+                    console.error("Failed to refresh Keycloak token");
                 });
-            }, 6000)
-        }).catch(function() {
+            }, 6000);
+        }).catch(function () {
             console.error("Failed to initialize Keycloak");
         });
     }, []);
@@ -48,10 +52,10 @@ const KeycloakComponent = () => {
             }}
         >
             <Grid item>
-                <CircularProgress size={50} />
+                <CircularProgress size={50}/>
             </Grid>
         </Grid>
     );
-}
+};
 
 export default KeycloakComponent;

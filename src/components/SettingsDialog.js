@@ -17,9 +17,9 @@ const SettingsDialog = () => {
     const onSubmit = data => {
         setSettings(data);
         closeDialog();
-    }
+    };
 
-    const formRef = useRef(null)
+    const formRef = useRef(null);
 
     return (
         <Dialog
@@ -37,7 +37,7 @@ const SettingsDialog = () => {
                             <Controller
                                 name="review"
                                 control={control}
-                                render={({ field }) => (
+                                render={({field}) => (
                                     <Checkbox
                                         {...field}
                                         checked={field.value}

@@ -16,20 +16,46 @@ export const useStore = create((setStore, getStore) => ({
         keycloak: null,
         token: "",
         roles: [],
+        userId: "",
+        users: [],
         setKeycloak: keycloak => {
             set({
                 keycloak: keycloak
-            })
+            });
         },
         setToken: token => {
             set({
                 token: token
-            })
+            });
         },
         setRoles: roles => {
             set({
                 roles: roles
-            })
+            });
+        },
+        setUserId: userId => {
+            set({
+                userId: userId
+            });
+        },
+        loadUsers: () => {
+            let roles = get().roles;
+            if (roles.includes("app-admin")) {
+                let token = get().token;
+                let realm = get().keycloak.realm;
+                const requestOptions = {
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                };
+                fetch(`http://127.0.0.1:8080/admin/realms/${realm}/users`, requestOptions)
+                    .then(r => r.json())
+                    .then(r => {
+                        set({
+                            users: r
+                        });
+                    });
+            }
         },
         logout: () => {
             get().keycloak.logout({
@@ -46,7 +72,7 @@ export const useStore = create((setStore, getStore) => ({
                 open: true,
                 type: type,
                 props: props
-            })
+            });
         },
         openConfirmationDialog: (props) => get().openDialog(CONFIRMATION_DIALOG, props),
         openClientDialog: (props) => get().openDialog(CLIENT_DIALOG, props),
@@ -56,7 +82,7 @@ export const useStore = create((setStore, getStore) => ({
             set({
                 open: false,
                 type: null
-            })
+            });
         }
     })),
     clientsApplied: create((set, get) => ({
@@ -64,7 +90,7 @@ export const useStore = create((setStore, getStore) => ({
         setClientsApplied: clientsApplied => {
             set({
                 clientsApplied: clientsApplied
-            })
+            });
         },
     })),
     clients: create((set, get) => ({
@@ -72,22 +98,22 @@ export const useStore = create((setStore, getStore) => ({
         setClients: clients => {
             set({
                 clients: clients
-            })
+            });
         },
         addClient: client => {
             set({
                 clients: [...get().clients, client]
-            })
+            });
         },
         editClient: client => {
             set({
                 clients: get().clients.map(i => i.id === client.id ? client : i)
-            })
+            });
         },
         deleteClient: clientId => {
             set({
                 clients: get().clients.filter(i => i.id !== clientId)
-            })
+            });
         }
     })),
     tasks: create((set, get) => ({
@@ -111,47 +137,47 @@ export const useStore = create((setStore, getStore) => ({
                     set({
                         tasks,
                         error: ""
-                    })
+                    });
                 })
                 .catch((error) => {
                     console.log(error);
                     set({
                         error: error,
                         tasks: []
-                    })
+                    });
                 })
                 .finally(() => {
                     set({
                         loaded: true
-                    })
-                })
+                    });
+                });
         },
         addOrEditTask: task => {
-            let tasks = []
+            let tasks = [];
             let edited = false;
             get().tasks.forEach(t => {
                 if (t.uuid === task.uuid) {
                     tasks.push({
                         ...task,
                         output: t.output
-                    })
+                    });
                     edited = true;
                 } else {
                     tasks.push(t);
                 }
-            })
+            });
             if (!edited) {
                 tasks.push(task);
             }
-            tasks = sortTasks(tasks)
+            tasks = sortTasks(tasks);
             set({
                 tasks: tasks
-            })
+            });
         },
         editTaskOutput: task => {
             set({
                 tasks: get().tasks.map(i => i.uuid === task.uuid ? {...i, output: task.output} : i)
-            })
+            });
         }
     })),
     api: create((set, get) => ({
@@ -169,7 +195,7 @@ export const useStore = create((setStore, getStore) => ({
                 `${ansibleApiUrl}/client`,
                 requestOptions,
                 "Client added"
-            )
+            );
         },
         editClient: (clientId, body) => {
             const token = getStore().keycloak.getState().token;
@@ -185,7 +211,7 @@ export const useStore = create((setStore, getStore) => ({
                 `${ansibleApiUrl}/client/${clientId}`,
                 requestOptions,
                 "Client edited"
-            )
+            );
         },
         editClientReview: (clientId, body) => {
             const token = getStore().keycloak.getState().token;
@@ -201,7 +227,7 @@ export const useStore = create((setStore, getStore) => ({
                 `${ansibleApiUrl}/client/${clientId}/review`,
                 requestOptions,
                 "Client edited"
-            )
+            );
         },
         getWireGuardConfig: clientId => {
             const token = getStore().keycloak.getState().token;
@@ -213,7 +239,7 @@ export const useStore = create((setStore, getStore) => ({
             return get().requestAndNotify(
                 `${ansibleApiUrl}/client/${clientId}/config`,
                 requestOptions
-            )
+            );
         },
         getPlaybookOutput: taskId => {
             const token = getStore().keycloak.getState().token;
@@ -225,7 +251,7 @@ export const useStore = create((setStore, getStore) => ({
             return get().requestAndNotify(
                 `${ansibleApiUrl}/playbook/${taskId}`,
                 requestOptions
-            )
+            );
         },
         cancelTask: taskId => {
             const requestOptions = {
@@ -235,7 +261,7 @@ export const useStore = create((setStore, getStore) => ({
                 `${flowerApiUrl}/task/revoke/${taskId}?terminate=true`,
                 requestOptions,
                 "Task canceled"
-            )
+            );
         },
         deleteClient: clientId => {
             const token = getStore().keycloak.getState().token;
@@ -249,7 +275,7 @@ export const useStore = create((setStore, getStore) => ({
                 `${ansibleApiUrl}/client/${clientId}`,
                 requestOptions,
                 "Client deleted"
-            )
+            );
         },
         requestAndNotify: (url, requestOptions, successMessage) => {
             return new Promise(resolve => {
@@ -284,7 +310,7 @@ export const useStore = create((setStore, getStore) => ({
                         }
                         getStore().notification.getState().addErrorNotification(message);
                     });
-            })
+            });
         },
         setSettings: body => {
             const token = getStore().keycloak.getState().token;
@@ -300,7 +326,7 @@ export const useStore = create((setStore, getStore) => ({
                 `${ansibleApiUrl}/settings`,
                 requestOptions,
                 "Settings edited"
-            )
+            );
         },
     })),
     notification: create((set, get) => ({
@@ -313,17 +339,17 @@ export const useStore = create((setStore, getStore) => ({
                 open: true,
                 message: message,
                 severity: severity
-            }
+            };
             set({
                 notifications: [...get().notifications, notification]
-            })
+            });
         },
         addSuccessNotification: message => get().addNotification(message, "success"),
         addErrorNotification: message => get().addNotification(message, "error"),
         clearNotification: message => {
             set({
                 notifications: get().notifications.filter(i => i.message !== message)
-            })
+            });
         },
     })),
     settings: create(set => ({
@@ -333,7 +359,7 @@ export const useStore = create((setStore, getStore) => ({
         setSettings: settings => {
             set({
                 settings: settings
-            })
+            });
         },
     })),
 }));

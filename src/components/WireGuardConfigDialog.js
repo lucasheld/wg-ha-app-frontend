@@ -18,7 +18,7 @@ import {useStoreApi, useStoreDialogs} from "../store";
 const modeEnum = {
     TEXT: "text",
     QR: "qr"
-}
+};
 
 const WireGuardConfigDialog = () => {
     const [wireGuardConfig, setWireGuardConfig] = useState("");
@@ -94,7 +94,7 @@ const WireGuardConfigDialog = () => {
                                     variant="contained"
                                     startIcon={<Download/>}
                                     onClick={() => {
-                                        const file = new Blob([wireGuardConfig], {type: 'text/plain'});
+                                        const file = new Blob([wireGuardConfig], {type: "text/plain"});
                                         const element = document.createElement("a");
                                         element.href = URL.createObjectURL(file);
                                         element.download = "wg0.conf";
@@ -108,7 +108,7 @@ const WireGuardConfigDialog = () => {
                     }
                     {
                         mode === modeEnum.QR &&
-                        <QRCodeSVG size="300" value={wireGuardConfig} />
+                        <QRCodeSVG size="300" value={wireGuardConfig}/>
                     }
                 </DialogContent>
                 <DialogActions>
@@ -118,7 +118,7 @@ const WireGuardConfigDialog = () => {
                 </DialogActions>
             </Dialog>
         </React.Fragment>
-    )
-}
+    );
+};
 
 export default WireGuardConfigDialog;

@@ -9,7 +9,7 @@ const ConfirmationDialog = () => {
     const handleOk = () => {
         props.handleOk();
         closeDialog();
-    }
+    };
 
     return (
         <Dialog
@@ -44,7 +44,7 @@ const ConfirmationDialog = () => {
                 </Button>
             </DialogActions>
         </Dialog>
-    )
-}
+    );
+};
 
 export default ConfirmationDialog;
