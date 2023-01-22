@@ -3,9 +3,9 @@ import TaskComponent from "./TaskComponent";
 import {useStoreTasks} from "../store";
 
 const TasksComponent = () => {
-    const tasks = useStoreTasks((state) => state.tasks);
-    const error = useStoreTasks((state) => state.error);
-    const loaded = useStoreTasks((state) => state.loaded);
+    const tasks = useStoreTasks(state => state.tasks);
+    const error = useStoreTasks(state => state.error);
+    const loaded = useStoreTasks(state => state.loaded);
 
     return (
         <div>
@@ -24,7 +24,7 @@ const TasksComponent = () => {
                         <Paper>
                             <List>
                                 {
-                                    tasks.map((task) =>
+                                    tasks.map(task =>
                                         <TaskComponent
                                             key={task.uuid}
                                             task={task}

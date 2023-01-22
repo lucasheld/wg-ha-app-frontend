@@ -4,11 +4,11 @@ import {Delete, Edit} from "@mui/icons-material";
 import React from "react";
 
 const UserComponent = (props) => {
-    const openUserDialog = useStoreDialogs((state) => state.openUserDialog);
-    const openConfirmationDialog = useStoreDialogs((state) => state.openConfirmationDialog);
+    const openUserDialog = useStoreDialogs(state => state.openUserDialog);
+    const openConfirmationDialog = useStoreDialogs(state => state.openConfirmationDialog);
 
-    const editUser = useStoreApi((state) => state.editUser);
-    const deleteUser = useStoreApi((state) => state.deleteUser);
+    const editUser = useStoreApi(state => state.editUser);
+    const deleteUser = useStoreApi(state => state.deleteUser);
 
     return (
         <React.Fragment>
@@ -29,7 +29,7 @@ const UserComponent = (props) => {
                                         openUserDialog({
                                             user: props.user,
                                             edit: true,
-                                            handleOk: async (body) => {
+                                            handleOk: async body => {
                                                 await editUser(props.user.id, body);
                                             }
                                         });

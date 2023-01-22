@@ -4,11 +4,11 @@ import {useStoreApi, useStoreDialogs, useStoreSettings} from "../store";
 import {Controller, useForm} from "react-hook-form";
 
 const SettingsDialog = () => {
-    const open = useStoreDialogs((state) => state.open);
-    const closeDialog = useStoreDialogs((state) => state.closeDialog);
+    const open = useStoreDialogs(state => state.open);
+    const closeDialog = useStoreDialogs(state => state.closeDialog);
 
-    const settings = useStoreSettings((state) => state.settings);
-    const setSettings = useStoreApi((state) => state.setSettings);
+    const settings = useStoreSettings(state => state.settings);
+    const setSettings = useStoreApi(state => state.setSettings);
 
     const {control, handleSubmit} = useForm({
         defaultValues: {...settings}
@@ -41,7 +41,7 @@ const SettingsDialog = () => {
                                     <Checkbox
                                         {...field}
                                         checked={field.value}
-                                        onChange={(e) => field.onChange(e.target.checked)}
+                                        onChange={e => field.onChange(e.target.checked)}
                                     />
                                 )}
                             />

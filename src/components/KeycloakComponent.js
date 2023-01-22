@@ -4,11 +4,11 @@ import {useStoreKeycloak} from "../store";
 import {CircularProgress, Grid} from "@mui/material";
 
 const KeycloakComponent = () => {
-    const setKeycloak = useStoreKeycloak((state) => state.setKeycloak);
-    const setToken = useStoreKeycloak((state) => state.setToken);
-    const setRoles = useStoreKeycloak((state) => state.setRoles);
-    const setUserId = useStoreKeycloak((state) => state.setUserId);
-    const loadUsers = useStoreKeycloak((state) => state.loadUsers);
+    const setKeycloak = useStoreKeycloak(state => state.setKeycloak);
+    const setToken = useStoreKeycloak(state => state.setToken);
+    const setRoles = useStoreKeycloak(state => state.setRoles);
+    const setUserId = useStoreKeycloak(state => state.setUserId);
+    const loadUsers = useStoreKeycloak(state => state.loadUsers);
 
     useEffect(() => {
         const keycloak = new Keycloak("/keycloak.json");
@@ -27,7 +27,7 @@ const KeycloakComponent = () => {
 
             // Token Refresh
             setInterval(() => {
-                keycloak.updateToken(70).then((refreshed) => {
+                keycloak.updateToken(70).then(refreshed => {
                     if (refreshed) {
                         setToken(keycloak.token);
                         console.info("Refreshed Keycloak token");

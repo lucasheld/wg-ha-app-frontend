@@ -2,9 +2,9 @@ import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogT
 import {useStoreDialogs} from "../store";
 
 const ConfirmationDialog = () => {
-    const open = useStoreDialogs((state) => state.open);
-    const props = useStoreDialogs((state) => state.props);
-    const closeDialog = useStoreDialogs((state) => state.closeDialog);
+    const open = useStoreDialogs(state => state.open);
+    const props = useStoreDialogs(state => state.props);
+    const closeDialog = useStoreDialogs(state => state.closeDialog);
 
     const handleOk = () => {
         props.handleOk();

@@ -10,7 +10,7 @@ export const WIREGUARD_CONFIG_DIALOG = "WIREGUARD_CONFIG_DIALOG";
 export const SETTINGS_DIALOG = "SETTINGS_DIALOG";
 
 const DialogsComponent = () => {
-    const type = useStoreDialogs((state) => state.type);
+    const type = useStoreDialogs(state => state.type);
 
     switch (type) {
         case CONFIRMATION_DIALOG:

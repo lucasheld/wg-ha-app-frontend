@@ -24,11 +24,11 @@ const WireGuardConfigDialog = () => {
     const [wireGuardConfig, setWireGuardConfig] = useState("");
     const [mode, setMode] = useState(modeEnum.TEXT);
 
-    const open = useStoreDialogs((state) => state.open);
-    const props = useStoreDialogs((state) => state.props);
-    const closeDialog = useStoreDialogs((state) => state.closeDialog);
+    const open = useStoreDialogs(state => state.open);
+    const props = useStoreDialogs(state => state.props);
+    const closeDialog = useStoreDialogs(state => state.closeDialog);
 
-    const getWireGuardConfig = useStoreApi((state) => state.getWireGuardConfig);
+    const getWireGuardConfig = useStoreApi(state => state.getWireGuardConfig);
 
     useEffect(
         () => {
@@ -44,7 +44,7 @@ const WireGuardConfigDialog = () => {
             .then(response => {
                 setWireGuardConfig(response);
             })
-            .catch((error) => {
+            .catch(error => {
                 console.log(error);
             });
     };

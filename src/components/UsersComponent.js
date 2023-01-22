@@ -5,11 +5,11 @@ import React from "react";
 import UserComponent from "./UserComponent";
 
 const UsersComponent = () => {
-    const openUserDialog = useStoreDialogs((state) => state.openUserDialog);
+    const openUserDialog = useStoreDialogs(state => state.openUserDialog);
 
-    const users = useStoreUsers((state) => state.users);
+    const users = useStoreUsers(state => state.users);
 
-    const addUser = useStoreApi((state) => state.addUser);
+    const addUser = useStoreApi(state => state.addUser);
 
     return (
         <React.Fragment>
@@ -22,7 +22,7 @@ const UsersComponent = () => {
                     <Paper>
                         <List>
                             {
-                                users.map((user) =>
+                                users.map(user =>
                                     <UserComponent
                                         key={user.id}
                                         user={user}
@@ -38,12 +38,12 @@ const UsersComponent = () => {
                     color="primary"
                     sx={{
                         position: "absolute",
-                        bottom: (theme) => theme.spacing(2),
-                        right: (theme) => theme.spacing(2)
+                        bottom: theme => theme.spacing(2),
+                        right: theme => theme.spacing(2)
                     }}
                     onClick={() => {
                         openUserDialog({
-                            handleOk: async (body) => {
+                            handleOk: async body => {
                                 await addUser(body);
                             }
                         });

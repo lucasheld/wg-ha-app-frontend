@@ -3,19 +3,19 @@ import io from "socket.io-client";
 import {useStoreClients, useStoreClientsApplied, useStoreKeycloak, useStoreSettings, useStoreTasks} from "../store";
 
 const WebsocketComponent = () => {
-    const setClients = useStoreClients((state) => state.setClients);
-    const addClient = useStoreClients((state) => state.addClient);
-    const editClient = useStoreClients((state) => state.editClient);
-    const deleteClient = useStoreClients((state) => state.deleteClient);
+    const setClients = useStoreClients(state => state.setClients);
+    const addClient = useStoreClients(state => state.addClient);
+    const editClient = useStoreClients(state => state.editClient);
+    const deleteClient = useStoreClients(state => state.deleteClient);
 
-    const setClientsApplied = useStoreClientsApplied((state) => state.setClientsApplied);
+    const setClientsApplied = useStoreClientsApplied(state => state.setClientsApplied);
 
-    const setSettings = useStoreSettings((state) => state.setSettings);
+    const setSettings = useStoreSettings(state => state.setSettings);
 
-    const addOrEditTask = useStoreTasks((state) => state.addOrEditTask);
-    const editTaskOutput = useStoreTasks((state) => state.editTaskOutput);
+    const addOrEditTask = useStoreTasks(state => state.addOrEditTask);
+    const editTaskOutput = useStoreTasks(state => state.editTaskOutput);
 
-    const token = useStoreKeycloak((state) => state.token);
+    const token = useStoreKeycloak(state => state.token);
 
     useEffect(() => {
         const socket = io("http://127.0.0.1:5000", {

@@ -6,11 +6,11 @@ import {useStoreDialogs, useStoreSettings} from "../store";
 import {Controller, useForm} from "react-hook-form";
 
 const ClientDialog = () => {
-    const open = useStoreDialogs((state) => state.open);
-    const props = useStoreDialogs((state) => state.props);
-    const closeDialog = useStoreDialogs((state) => state.closeDialog);
+    const open = useStoreDialogs(state => state.open);
+    const props = useStoreDialogs(state => state.props);
+    const closeDialog = useStoreDialogs(state => state.closeDialog);
 
-    const settings = useStoreSettings((state) => state.settings);
+    const settings = useStoreSettings(state => state.settings);
 
     const {control, handleSubmit} = useForm({
         defaultValues:

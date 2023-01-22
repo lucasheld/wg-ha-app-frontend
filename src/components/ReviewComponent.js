@@ -5,12 +5,12 @@ import {useStoreApi, useStoreDialogs, useStoreKeycloak} from "../store";
 import {userNameById} from "../utils";
 
 const ReviewComponent = (props) => {
-    const editClientReview = useStoreApi((state) => state.editClientReview);
+    const editClientReview = useStoreApi(state => state.editClientReview);
 
-    const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
-    const closeDialog = useStoreDialogs((state) => state.closeDialog);
+    const openClientDialog = useStoreDialogs(state => state.openClientDialog);
+    const closeDialog = useStoreDialogs(state => state.closeDialog);
 
-    const users = useStoreKeycloak((state) => state.users);
+    const users = useStoreKeycloak(state => state.users);
 
     const declineClient = () => {
         editClientReview(props.client.id, {

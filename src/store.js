@@ -74,10 +74,10 @@ export const useStore = create((setStore, getStore) => ({
                 props: props
             });
         },
-        openConfirmationDialog: (props) => get().openDialog(CONFIRMATION_DIALOG, props),
-        openClientDialog: (props) => get().openDialog(CLIENT_DIALOG, props),
-        openWireGuardConfigDialog: (props) => get().openDialog(WIREGUARD_CONFIG_DIALOG, props),
-        openSettingsDialog: (props) => get().openDialog(SETTINGS_DIALOG, props),
+        openConfirmationDialog: props => get().openDialog(CONFIRMATION_DIALOG, props),
+        openClientDialog: props => get().openDialog(CLIENT_DIALOG, props),
+        openWireGuardConfigDialog: props => get().openDialog(WIREGUARD_CONFIG_DIALOG, props),
+        openSettingsDialog: props => get().openDialog(SETTINGS_DIALOG, props),
         closeDialog: () => {
             set({
                 open: false,
@@ -139,7 +139,7 @@ export const useStore = create((setStore, getStore) => ({
                         error: ""
                     });
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.log(error);
                     set({
                         error: error,
@@ -364,11 +364,11 @@ export const useStore = create((setStore, getStore) => ({
     })),
 }));
 
-export const useStoreKeycloak = (state) => useStore((s) => s.keycloak(state));
-export const useStoreDialogs = (state) => useStore((s) => s.dialogs(state));
-export const useStoreClientsApplied = (state) => useStore((s) => s.clientsApplied(state));
-export const useStoreClients = (state) => useStore((s) => s.clients(state));
-export const useStoreTasks = (state) => useStore((s) => s.tasks(state));
-export const useStoreApi = (state) => useStore((s) => s.api(state));
-export const useStoreNotification = (state) => useStore((s) => s.notification(state));
-export const useStoreSettings = (state) => useStore((s) => s.settings(state));
+export const useStoreKeycloak = state => useStore(s => s.keycloak(state));
+export const useStoreDialogs = state => useStore(s => s.dialogs(state));
+export const useStoreClientsApplied = state => useStore(s => s.clientsApplied(state));
+export const useStoreClients = state => useStore(s => s.clients(state));
+export const useStoreTasks = state => useStore(s => s.tasks(state));
+export const useStoreApi = state => useStore(s => s.api(state));
+export const useStoreNotification = state => useStore(s => s.notification(state));
+export const useStoreSettings = state => useStore(s => s.settings(state));

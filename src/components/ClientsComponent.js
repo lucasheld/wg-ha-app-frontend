@@ -5,11 +5,11 @@ import {useStoreApi, useStoreClients, useStoreDialogs, useStoreKeycloak} from ".
 import ClientComponent from "./ClientComponent";
 
 const ClientsComponent = ({mode}) => {
-    const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
+    const openClientDialog = useStoreDialogs(state => state.openClientDialog);
 
-    const allClients = useStoreClients((state) => state.clients);
+    const allClients = useStoreClients(state => state.clients);
 
-    const userId = useStoreKeycloak((state) => state.userId);
+    const userId = useStoreKeycloak(state => state.userId);
 
     let clients;
     if (mode === "all") {
@@ -18,7 +18,7 @@ const ClientsComponent = ({mode}) => {
         clients = allClients.filter(c => c.user_id === userId);
     }
 
-    const addClient = useStoreApi((state) => state.addClient);
+    const addClient = useStoreApi(state => state.addClient);
 
     return (
         <React.Fragment>
@@ -31,7 +31,7 @@ const ClientsComponent = ({mode}) => {
                     <Paper>
                         <List>
                             {
-                                clients.map((client) =>
+                                clients.map(client =>
                                     <ClientComponent
                                         key={client.id}
                                         client={client}
@@ -48,8 +48,8 @@ const ClientsComponent = ({mode}) => {
                     color="primary"
                     sx={{
                         position: "absolute",
-                        bottom: (theme) => theme.spacing(2),
-                        right: (theme) => theme.spacing(2)
+                        bottom: theme => theme.spacing(2),
+                        right: theme => theme.spacing(2)
                     }}
                     onClick={() => {
                         openClientDialog({

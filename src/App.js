@@ -18,7 +18,7 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import {Devices, Logout, Memory, Reviews, Settings} from "@mui/icons-material";
+import {Devices, ImportantDevices, Logout, Memory, Reviews, Settings} from "@mui/icons-material";
 import ClientsComponent from "./components/ClientsComponent";
 import {useStoreClients, useStoreDialogs, useStoreKeycloak, useStoreSettings, useStoreTasks} from "./store";
 import DialogsComponent from "./components/DialogsComponent";
@@ -28,21 +28,21 @@ import SnackbarComponent from "./components/SnackbarComponent";
 import ReviewsComponent from "./components/ReviewsComponent";
 
 const App = () => {
-    const token = useStoreKeycloak((state) => state.token);
+    const token = useStoreKeycloak(state => state.token);
 
-    const logout = useStoreKeycloak((state) => state.logout);
-    const roles = useStoreKeycloak((state) => state.roles);
-    const tasks = useStoreTasks((state) => state.tasks);
+    const logout = useStoreKeycloak(state => state.logout);
+    const roles = useStoreKeycloak(state => state.roles);
+    const tasks = useStoreTasks(state => state.tasks);
 
-    const loadTasks = useStoreTasks((state) => state.loadTasks);
+    const loadTasks = useStoreTasks(state => state.loadTasks);
     const [displayComponent, setDisplayComponent] = useState(<div/>);
 
     const settings = useStoreSettings(state => state.settings);
 
-    const clients = useStoreClients((state) => state.clients);
+    const clients = useStoreClients(state => state.clients);
     const reviewClients = clients.filter(client => client.permitted === "PENDING");
 
-    const openSettingsDialog = useStoreDialogs((state) => state.openSettingsDialog);
+    const openSettingsDialog = useStoreDialogs(state => state.openSettingsDialog);
 
     useEffect(() => {
         loadTasks();
@@ -79,7 +79,7 @@ const App = () => {
                     <KeycloakComponent/> :
                     <Box sx={{display: "flex"}}>
                         <CssBaseline/>
-                        <AppBar position="fixed" sx={{zIndex: (theme) => theme.zIndex.drawer + 1}}>
+                        <AppBar position="fixed" sx={{zIndex: theme => theme.zIndex.drawer + 1}}>
                             <Toolbar>
                                 <Typography variant="h6" noWrap component="div" sx={{flexGrow: 1}}>
                                     frontend
@@ -144,42 +144,28 @@ const App = () => {
                                             </ListItemButton>
                                         </ListItem>
                                     }
+                                    <ListItem key="clients" disablePadding>
+                                        <ListItemButton
+                                            onClick={() => setDisplayComponent(<ClientsComponent/>)}
+                                        >
+                                            <ListItemIcon>
+                                                <Devices/>
+                                            </ListItemIcon>
+                                            <ListItemText primary="Clients"/>
+                                        </ListItemButton>
+                                    </ListItem>
                                     {
-                                        roles.includes("app-admin") ?
-                                            <div>
-                                                <ListItem key="ownClients" disablePadding>
-                                                    <ListItemButton
-                                                        onClick={() => setDisplayComponent(<ClientsComponent/>)}
-                                                    >
-                                                        <ListItemIcon>
-                                                            <Devices/>
-                                                        </ListItemIcon>
-                                                        <ListItemText primary="Own clients"/>
-                                                    </ListItemButton>
-                                                </ListItem>
-                                                <ListItem key="allClients" disablePadding>
-                                                    <ListItemButton
-                                                        onClick={() => setDisplayComponent(<ClientsComponent
-                                                            mode="all"/>)}
-                                                    >
-                                                        <ListItemIcon>
-                                                            <Devices/>
-                                                        </ListItemIcon>
-                                                        <ListItemText primary="All clients"/>
-                                                    </ListItemButton>
-                                                </ListItem>
-                                            </div>
-                                            :
-                                            <ListItem key="clients" disablePadding>
-                                                <ListItemButton
-                                                    onClick={() => setDisplayComponent(<ClientsComponent/>)}
-                                                >
-                                                    <ListItemIcon>
-                                                        <Devices/>
-                                                    </ListItemIcon>
-                                                    <ListItemText primary="Clients"/>
-                                                </ListItemButton>
-                                            </ListItem>
+                                        roles.includes("app-admin") &&
+                                        <ListItem key="allClients" disablePadding>
+                                            <ListItemButton
+                                                onClick={() => setDisplayComponent(<ClientsComponent mode="all"/>)}
+                                            >
+                                                <ListItemIcon>
+                                                    <ImportantDevices/>
+                                                </ListItemIcon>
+                                                <ListItemText primary="All clients"/>
+                                            </ListItemButton>
+                                        </ListItem>
                                     }
                                     {
                                         roles.includes("app-admin") && settings.review &&

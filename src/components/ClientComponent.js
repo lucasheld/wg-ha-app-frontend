@@ -14,18 +14,18 @@ import {useStoreApi, useStoreClients, useStoreClientsApplied, useStoreDialogs, u
 import {userNameById} from "../utils";
 
 const ClientComponent = (props) => {
-    const openClientDialog = useStoreDialogs((state) => state.openClientDialog);
-    const openConfirmationDialog = useStoreDialogs((state) => state.openConfirmationDialog);
-    const openWireGuardConfigDialog = useStoreDialogs((state) => state.openWireGuardConfigDialog);
+    const openClientDialog = useStoreDialogs(state => state.openClientDialog);
+    const openConfirmationDialog = useStoreDialogs(state => state.openConfirmationDialog);
+    const openWireGuardConfigDialog = useStoreDialogs(state => state.openWireGuardConfigDialog);
 
     const clients = useStoreClients(state => state.clients);
 
     const clientsApplied = useStoreClientsApplied(state => state.clientsApplied);
 
-    const editClient = useStoreApi((state) => state.editClient);
-    const deleteClient = useStoreApi((state) => state.deleteClient);
+    const editClient = useStoreApi(state => state.editClient);
+    const deleteClient = useStoreApi(state => state.deleteClient);
 
-    const users = useStoreKeycloak((state) => state.users);
+    const users = useStoreKeycloak(state => state.users);
 
     const clientAndClientAppliedMatch = () => {
         // compare client and clientApplied and ignore id, title values
@@ -67,7 +67,7 @@ const ClientComponent = (props) => {
                                         openClientDialog({
                                             title: "Edit client",
                                             client: props.client,
-                                            handleOk: async (body) => {
+                                            handleOk: async body => {
                                                 await editClient(props.client.id, body);
                                             }
                                         });
@@ -97,6 +97,7 @@ const ClientComponent = (props) => {
                 >
                     <ListItemButton
                         onClick={() => {
+                            props.client.permitted === "ACCEPTED" &&
                             openWireGuardConfigDialog({
                                 client: props.client
                             });

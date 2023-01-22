@@ -7,7 +7,7 @@ const filter = createFilterOptions();
 const MultiChipInputComponent = React.forwardRef(({onChange, name, label, value, id, title, disabled}, ref) => {
     const [options, setOptions] = useState([]);
 
-    // const tags = useStoreTags((state) => state.tags);
+    // const tags = useStoreTags(state => state.tags);
     //
     // useEffect(() => {
     //     setOptions(tags);
@@ -49,7 +49,7 @@ const MultiChipInputComponent = React.forwardRef(({onChange, name, label, value,
 
                 const {inputValue} = params;
                 // Suggest the creation of a new value
-                const isExisting = options.some((option) => inputValue === option.name);
+                const isExisting = options.some(option => inputValue === option.name);
                 if (inputValue !== "" && !isExisting) {
                     filtered.push({
                         name: inputValue,
@@ -65,7 +65,7 @@ const MultiChipInputComponent = React.forwardRef(({onChange, name, label, value,
             handleHomeEndKeys
             id={id}
             options={options}
-            getOptionLabel={(option) => {
+            getOptionLabel={option => {
                 // Value selected with enter, right from the input
                 if (typeof option === "string") {
                     return option;
@@ -79,7 +79,7 @@ const MultiChipInputComponent = React.forwardRef(({onChange, name, label, value,
             }}
             renderOption={(props, option) => <li {...props}>{option.create ? option.label : option.name}</li>}
             freeSolo
-            renderInput={(params) => (
+            renderInput={params => (
                 <TextField
                     {...params}
                     margin="dense"

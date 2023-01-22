@@ -21,7 +21,7 @@ const TaskComponent = ({task}) => {
     let taskFailed = task.state === "FAILURE" || task.state === "REVOKED";
     let taskRunning = !(taskSucceeded || taskFailed);
 
-    const cancelTask = useStoreApi((state) => state.cancelTask);
+    const cancelTask = useStoreApi(state => state.cancelTask);
 
     return (
         <React.Fragment>

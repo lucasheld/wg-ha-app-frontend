@@ -4,7 +4,7 @@ import {Alert, List, Paper} from "@mui/material";
 import ReviewComponent from "./ReviewComponent";
 
 const ReviewsComponent = () => {
-    const clients = useStoreClients((state) => state.clients);
+    const clients = useStoreClients(state => state.clients);
 
     const reviewClients = clients.filter(client => client.permitted === "PENDING");
 
