@@ -75,13 +75,13 @@ const SettingsDialog = () => {
                     >
                         <ListItem>
                             <Controller
-                                name="server.interface_ips"
+                                name="server.address"
                                 control={control}
                                 render={({field}) => (
                                     <MultiChipInputComponent
                                         {...field}
-                                        id="server.interface_ips"
-                                        title="Interface IPs"
+                                        id="server.address"
+                                        title="Address"
                                         fullWidth
                                     />
                                 )}

@@ -356,7 +356,7 @@ export const useStore = create((setStore, getStore) => ({
         settings: {
             review: false,
             server: {
-                interface_ips: [],
+                address: [],
                 private_key: "",
                 endpoint: ""
             }
