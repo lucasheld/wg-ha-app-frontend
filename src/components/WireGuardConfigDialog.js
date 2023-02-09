@@ -8,7 +8,7 @@ import {
     DialogContent,
     DialogTitle,
     Grid,
-    IconButton
+    TextField
 } from "@mui/material";
 import {Download, QrCode, TextSnippet} from "@mui/icons-material";
 import {QRCodeSVG} from "qrcode.react";
@@ -22,6 +22,7 @@ const modeEnum = {
 
 const WireGuardConfigDialog = () => {
     const [wireGuardConfig, setWireGuardConfig] = useState("");
+    const [wireGuardConfigWithPrivateKey, setWireGuardConfigWithPrivateKey] = useState("");
     const [mode, setMode] = useState(modeEnum.TEXT);
 
     const open = useStoreDialogs(state => state.open);
@@ -43,6 +44,7 @@ const WireGuardConfigDialog = () => {
         getWireGuardConfig(props.client.id)
             .then(response => {
                 setWireGuardConfig(response);
+                setWireGuardConfigWithPrivateKey(response);
             })
             .catch(error => {
                 console.log(error);
@@ -62,28 +64,38 @@ const WireGuardConfigDialog = () => {
                     WireGuard Config: {props.client.title}
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Grid container>
-                        <ButtonGroup variant="contained">
-                            <IconButton
+                    <TextField
+                        margin="dense"
+                        label="Private Key (local replacement)"
+                        type="text"
+                        onChange={e => {
+                            let privateKey = e.target.value;
+                            setWireGuardConfigWithPrivateKey(wireGuardConfig.replace("INSERT_PRIVATE_KEY", privateKey));
+                        }}
+                        fullWidth
+                        sx={{marginY: 0}}
+                    />
+                    <Grid container sx={{marginY: "10px"}}>
+                        <ButtonGroup variant="outlined">
+                            <Button
                                 onClick={() => setMode(modeEnum.TEXT)}
-                                disabled={mode === modeEnum.TEXT}
+                                startIcon={<TextSnippet/>}
                             >
-                                <TextSnippet/>
-                            </IconButton>
-                            <IconButton
+                                Text
+                            </Button>
+                            <Button
                                 onClick={() => setMode(modeEnum.QR)}
-                                disabled={mode === modeEnum.QR}
+                                startIcon={<QrCode/>}
                             >
-                                <QrCode/>
-                            </IconButton>
+                                QR-Code
+                            </Button>
                         </ButtonGroup>
                     </Grid>
-                    <br/>
                     {
                         mode === modeEnum.TEXT &&
                         <React.Fragment>
                             <CopyBlock
-                                text={wireGuardConfig}
+                                text={wireGuardConfigWithPrivateKey}
                                 language="text"
                                 showLineNumbers={false}
                                 theme={atomOneLight}
@@ -94,7 +106,7 @@ const WireGuardConfigDialog = () => {
                                     variant="contained"
                                     startIcon={<Download/>}
                                     onClick={() => {
-                                        const file = new Blob([wireGuardConfig], {type: "text/plain"});
+                                        const file = new Blob([wireGuardConfigWithPrivateKey], {type: "text/plain"});
                                         const element = document.createElement("a");
                                         element.href = URL.createObjectURL(file);
                                         element.download = "wg0.conf";
@@ -108,7 +120,7 @@ const WireGuardConfigDialog = () => {
                     }
                     {
                         mode === modeEnum.QR &&
-                        <QRCodeSVG size="300" value={wireGuardConfig}/>
+                        <QRCodeSVG size="300" value={wireGuardConfigWithPrivateKey}/>
                     }
                 </DialogContent>
                 <DialogActions>
