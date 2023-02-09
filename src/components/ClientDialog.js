@@ -32,7 +32,7 @@ const ClientDialog = () => {
                 } :
                 {
                     title: "",
-                    private_key: "",
+                    public_key: "",
                     tags: [],
                     services: []
                 }
@@ -73,14 +73,14 @@ const ClientDialog = () => {
                         )}
                     />
                     <Controller
-                        name="private_key"
+                        name="public_key"
                         control={control}
                         render={({field}) => (
                             <TextField
                                 {...field}
                                 required
                                 margin="dense"
-                                label="Private Key"
+                                label="Public Key"
                                 type="text"
                                 fullWidth
                                 disabled={props.disabled}
