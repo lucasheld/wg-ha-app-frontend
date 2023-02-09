@@ -86,6 +86,7 @@ const MultiChipInputComponent = React.forwardRef(({onChange, name, label, value,
                     label={title}
                 />
             )}
+            fullWidth
             disabled={disabled}
         />
     );

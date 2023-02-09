@@ -354,7 +354,13 @@ export const useStore = create((setStore, getStore) => ({
     })),
     settings: create(set => ({
         settings: {
-            review: false
+            review: false,
+            server: {
+                interface_ips: [],
+                private_key: "",
+                public_key: "",
+                endpoint: ""
+            }
         },
         setSettings: settings => {
             set({

@@ -1,7 +1,8 @@
-import {Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel} from "@mui/material";
+import {Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField, List, ListItem, ListSubheader, Typography} from "@mui/material";
 import {useRef} from "react";
 import {useStoreApi, useStoreDialogs, useStoreSettings} from "../store";
 import {Controller, useForm} from "react-hook-form";
+import MultiChipInputComponent from "./MultiChipInputComponent";
 
 const SettingsDialog = () => {
     const open = useStoreDialogs(state => state.open);
@@ -31,23 +32,94 @@ const SettingsDialog = () => {
                 <DialogTitle id="alert-dialog-title">
                     Edit settings
                 </DialogTitle>
-                <DialogContent dividers>
-                    <FormControlLabel
-                        control={
+                <DialogContent 
+                    dividers
+                    sx={{paddingX: "8px"}}
+                >
+                    <List
+                        subheader={
+                            <ListSubheader>
+                                <Typography sx={{fontWeight: 'bold'}}>
+                                    General
+                                </Typography>
+                            </ListSubheader>
+                        }
+                    >
+                        <ListItem>
+                            <FormControlLabel
+                                control={
+                                    <Controller
+                                        name="review"
+                                        control={control}
+                                        render={({field}) => (
+                                            <Checkbox
+                                                {...field}
+                                                checked={field.value}
+                                                onChange={e => field.onChange(e.target.checked)}
+                                            />
+                                        )}
+                                    />
+                                }
+                                label="Enable client review"
+                            />
+                        </ListItem>
+                    </List>
+                    <List
+                        subheader={
+                            <ListSubheader>
+                                <Typography sx={{fontWeight: 'bold'}}>
+                                    WireGuard server interface
+                                </Typography>
+                            </ListSubheader>
+                        }
+                    >
+                        <ListItem>
                             <Controller
-                                name="review"
+                                name="server.interface_ips"
                                 control={control}
                                 render={({field}) => (
-                                    <Checkbox
+                                    <MultiChipInputComponent
                                         {...field}
-                                        checked={field.value}
-                                        onChange={e => field.onChange(e.target.checked)}
+                                        id="server.interface_ips"
+                                        title="Interface IPs"
+                                        fullWidth
                                     />
                                 )}
                             />
-                        }
-                        label="Enable client review"
-                    />
+                        </ListItem>
+                        <ListItem>
+                            <Controller
+                                name="server.private_key"
+                                control={control}
+                                render={({field}) => (
+                                    <TextField
+                                        {...field}
+                                        required
+                                        margin="dense"
+                                        label="Private Key"
+                                        type="text"
+                                        fullWidth
+                                    />
+                                )}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <Controller
+                                name="server.endpoint"
+                                control={control}
+                                render={({field}) => (
+                                    <TextField
+                                        {...field}
+                                        required
+                                        margin="dense"
+                                        label="Endpoint"
+                                        type="text"
+                                        fullWidth
+                                    />
+                                )}
+                            />
+                        </ListItem>
+                    </List>
                 </DialogContent>
                 <DialogActions>
                     <Button
