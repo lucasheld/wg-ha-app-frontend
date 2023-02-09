@@ -358,7 +358,6 @@ export const useStore = create((setStore, getStore) => ({
             server: {
                 interface_ips: [],
                 private_key: "",
-                public_key: "",
                 endpoint: ""
             }
         },
