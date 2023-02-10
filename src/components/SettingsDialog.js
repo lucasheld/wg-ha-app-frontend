@@ -75,20 +75,6 @@ const SettingsDialog = () => {
                     >
                         <ListItem>
                             <Controller
-                                name="server.address"
-                                control={control}
-                                render={({field}) => (
-                                    <MultiChipInputComponent
-                                        {...field}
-                                        id="server.address"
-                                        title="Address"
-                                        fullWidth
-                                    />
-                                )}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <Controller
                                 name="server.private_key"
                                 control={control}
                                 render={({field}) => (
