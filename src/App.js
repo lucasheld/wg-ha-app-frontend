@@ -18,7 +18,7 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import {Devices, ImportantDevices, Logout, Memory, Reviews, Settings} from "@mui/icons-material";
+import {Devices, ImportantDevices, Logout, Memory, Reviews, Settings, LocalFireDepartment} from "@mui/icons-material";
 import ClientsComponent from "./components/ClientsComponent";
 import {useStoreClients, useStoreDialogs, useStoreKeycloak, useStoreSettings, useStoreTasks} from "./store";
 import DialogsComponent from "./components/DialogsComponent";
@@ -26,6 +26,7 @@ import WebsocketComponent from "./components/WebsocketComponent";
 import KeycloakComponent from "./components/KeycloakComponent";
 import SnackbarComponent from "./components/SnackbarComponent";
 import ReviewsComponent from "./components/ReviewsComponent";
+import CustomRulesComponent from "./components/CustomRulesComponent";
 
 const App = () => {
     const token = useStoreKeycloak(state => state.token);
@@ -179,6 +180,19 @@ const App = () => {
                                                     </Badge>
                                                 </ListItemIcon>
                                                 <ListItemText primary="Reviews"/>
+                                            </ListItemButton>
+                                        </ListItem>
+                                    }
+                                    {
+                                        roles.includes("app-admin") &&
+                                        <ListItem key="customRules" disablePadding>
+                                            <ListItemButton
+                                                onClick={() => setDisplayComponent(<CustomRulesComponent/>)}
+                                            >
+                                                <ListItemIcon>
+                                                    <LocalFireDepartment/>
+                                                </ListItemIcon>
+                                                <ListItemText primary="Custom Rules"/>
                                             </ListItemButton>
                                         </ListItem>
                                     }

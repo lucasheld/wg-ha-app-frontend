@@ -2,6 +2,7 @@ import create from "zustand";
 import {
     CLIENT_DIALOG,
     CONFIRMATION_DIALOG,
+    CUSTOM_RULE_DIALOG,
     SETTINGS_DIALOG,
     WIREGUARD_CONFIG_DIALOG
 } from "./components/DialogsComponent";
@@ -78,6 +79,7 @@ export const useStore = create((setStore, getStore) => ({
         openClientDialog: props => get().openDialog(CLIENT_DIALOG, props),
         openWireGuardConfigDialog: props => get().openDialog(WIREGUARD_CONFIG_DIALOG, props),
         openSettingsDialog: props => get().openDialog(SETTINGS_DIALOG, props),
+        openCustomRuleDialog: props => get().openDialog(CUSTOM_RULE_DIALOG, props),
         closeDialog: () => {
             set({
                 open: false,
@@ -328,6 +330,52 @@ export const useStore = create((setStore, getStore) => ({
                 "Settings edited"
             );
         },
+        addCustomRule: body => {
+            const token = getStore().keycloak.getState().token;
+            const requestOptions = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(body)
+            };
+            return get().requestAndNotify(
+                `${ansibleApiUrl}/custom-rule`,
+                requestOptions,
+                "Custom rule added"
+            );
+        },
+        editCustomRule: (customRuleId, body) => {
+            const token = getStore().keycloak.getState().token;
+            const requestOptions = {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(body)
+            };
+            return get().requestAndNotify(
+                `${ansibleApiUrl}/custom-rule/${customRuleId}`,
+                requestOptions,
+                "Custom rule edited"
+            );
+        },
+        deleteCustomRule: customRuleId => {
+            const token = getStore().keycloak.getState().token;
+            const requestOptions = {
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            };
+            return get().requestAndNotify(
+                `${ansibleApiUrl}/custom-rule/${customRuleId}`,
+                requestOptions,
+                "Custom rule deleted"
+            );
+        },
     })),
     notification: create((set, get) => ({
         notifications: [],
@@ -367,6 +415,29 @@ export const useStore = create((setStore, getStore) => ({
             });
         },
     })),
+    customRules: create((set, get) => ({
+        customRules: [],
+        setCustomRules: customRules => {
+            set({
+                customRules: customRules
+            });
+        },
+        addCustomRule: customRule => {
+            set({
+                customRules: [...get().customRules, customRule]
+            });
+        },
+        editCustomRule: customRule => {
+            set({
+                customRules: get().customRules.map(i => i.id === customRule.id ? customRule : i)
+            });
+        },
+        deleteCustomRule: customRuleId => {
+            set({
+                customRules: get().customRules.filter(i => i.id !== customRuleId)
+            });
+        }
+    })),
 }));
 
 export const useStoreKeycloak = state => useStore(s => s.keycloak(state));
@@ -377,3 +448,4 @@ export const useStoreTasks = state => useStore(s => s.tasks(state));
 export const useStoreApi = state => useStore(s => s.api(state));
 export const useStoreNotification = state => useStore(s => s.notification(state));
 export const useStoreSettings = state => useStore(s => s.settings(state));
+export const useStoreCustomRules = state => useStore(s => s.customRules(state));

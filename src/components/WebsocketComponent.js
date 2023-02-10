@@ -1,12 +1,17 @@
 import {useEffect} from "react";
 import io from "socket.io-client";
-import {useStoreClients, useStoreClientsApplied, useStoreKeycloak, useStoreSettings, useStoreTasks} from "../store";
+import {useStoreClients, useStoreClientsApplied, useStoreCustomRules, useStoreKeycloak, useStoreSettings, useStoreTasks} from "../store";
 
 const WebsocketComponent = () => {
     const setClients = useStoreClients(state => state.setClients);
     const addClient = useStoreClients(state => state.addClient);
     const editClient = useStoreClients(state => state.editClient);
     const deleteClient = useStoreClients(state => state.deleteClient);
+
+    const setCustomRules = useStoreCustomRules(state => state.setCustomRules);
+    const addCustomRule = useStoreCustomRules(state => state.addCustomRule);
+    const editCustomRule = useStoreCustomRules(state => state.editCustomRule);
+    const deleteCustomRule = useStoreCustomRules(state => state.deleteCustomRule);
 
     const setClientsApplied = useStoreClientsApplied(state => state.setClientsApplied);
 
@@ -47,6 +52,23 @@ const WebsocketComponent = () => {
 
         socket.on("deleteClient", r => {
             deleteClient(r);
+        });
+
+
+        socket.on("setCustomRules", r => {
+            setCustomRules(r);
+        });
+
+        socket.on("addCustomRule", r => {
+            addCustomRule(r);
+        });
+
+        socket.on("editCustomRule", r => {
+            editCustomRule(r);
+        });
+
+        socket.on("deleteCustomRule", r => {
+            deleteCustomRule(r);
         });
 
 
@@ -94,6 +116,10 @@ const WebsocketComponent = () => {
                 "deleteClient",
                 "setClientsApplied",
                 "setSettings",
+                "setCustomRules",
+                "addCustomRule",
+                "editCustomRule",
+                "deleteCustomRule",
                 "task-sent",
                 "task-received",
                 "task-started",
