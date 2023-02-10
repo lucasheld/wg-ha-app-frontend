@@ -65,7 +65,10 @@ const CustomRuleComponent = (props) => {
                     }
                 >
                     <ListItemButton
-                        onClick={() => {}}
+                        disabled
+                        style={{
+                            opacity: 1
+                        }}
                     >
                         <ListItemText
                             id={`label-${props.customRule.id}`}
