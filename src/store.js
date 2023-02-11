@@ -1,4 +1,4 @@
-import create from "zustand";
+import {create} from "zustand";
 import {
     CLIENT_DIALOG,
     CONFIRMATION_DIALOG,
