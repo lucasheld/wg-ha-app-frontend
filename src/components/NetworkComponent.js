@@ -135,15 +135,24 @@ const NetworkComponent = () => {
                             let allowed_peer_ip_version = get_ip_version(allowed_peer_ip);
                             if (peer_ip_version === allowed_peer_ip_version) {
                                 service.rules.forEach(service_rule => {
-                                    service_rule.ports.forEach(port => {
+                                    if (service_rule.ports?.length) {
+                                        service_rule.ports.forEach(port => {
+                                            rules.push({
+                                                "src": peer,
+                                                "dst": allowed_peer,
+                                                "protocol": service_rule.protocol,
+                                                "port": port,
+                                                "type": peer_ip_version
+                                            })
+                                        })
+                                    } else {
                                         rules.push({
                                             "src": peer,
                                             "dst": allowed_peer,
-                                            "port": port,
                                             "protocol": service_rule.protocol,
                                             "type": peer_ip_version
                                         })
-                                    })
+                                    }
                                 })
                             }
                         })
