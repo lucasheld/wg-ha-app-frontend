@@ -391,7 +391,6 @@ const NetworkComponent = () => {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 fitView
-                elevateEdgesOnSelect
                 edgeTypes={edgeTypes}
             >
                 <Controls />
