@@ -286,7 +286,7 @@ const NetworkComponent = () => {
 
         // add edges to newEdges
         newEdgesTemp.forEach(edge => {
-            let newEdge = {}
+            let newEdge;
             if (!edge.bidirectional) {
                 newEdge = {
                     markerEnd: {
@@ -342,6 +342,7 @@ const NetworkComponent = () => {
                 onEdgesChange={onEdgesChange}
                 onConnect={onConnect}
                 fitView
+                elevateEdgesOnSelect
             >
                 <Controls />
                 <Background />
