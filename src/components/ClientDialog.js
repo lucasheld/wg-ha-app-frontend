@@ -10,7 +10,7 @@ import {
     Grid,
     TextField
 } from "@mui/material";
-import {useRef} from "react";
+import React, {useRef} from "react";
 import MultiChipInputComponent from "./MultiChipInputComponent";
 import SelectServicesComponent from "./SelectServicesComponent";
 import {useStoreDialogs} from "../store";
@@ -114,7 +114,7 @@ const ClientDialog = () => {
                             alignItems="center"
                             justifyContent="center"
                         >
-                            <Grid item xs={4}>
+                            <Grid item xs={6}>
                                 <TextField
                                     margin="dense"
                                     type="text"
@@ -123,7 +123,7 @@ const ClientDialog = () => {
                                     value="10.0."
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <Controller
                                     name="subnet"
                                     control={control}
@@ -140,13 +140,55 @@ const ClientDialog = () => {
                                     )}
                                 />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={3}>
                                 <TextField
                                     margin="dense"
                                     type="text"
                                     fullWidth
                                     disabled
                                     value=".X"
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid
+                            container
+                            spacing={2}
+                            alignItems="center"
+                            justifyContent="center"
+                        >
+                            <Grid item xs={6}>
+                                <TextField
+                                    margin="dense"
+                                    type="text"
+                                    fullWidth
+                                    disabled
+                                    value="fdc9:281f:4d7:9ee9::"
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <Controller
+                                    name="subnet"
+                                    control={control}
+                                    render={({field}) => (
+                                        <TextField
+                                            {...field}
+                                            required
+                                            margin="dense"
+                                            label="Subnet"
+                                            type="number"
+                                            fullWidth
+                                            disabled
+                                        />
+                                    )}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <TextField
+                                    margin="dense"
+                                    type="text"
+                                    fullWidth
+                                    disabled
+                                    value=":X"
                                 />
                             </Grid>
                         </Grid>
