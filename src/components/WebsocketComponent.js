@@ -1,6 +1,13 @@
 import {useEffect} from "react";
 import io from "socket.io-client";
-import {useStoreClients, useStoreClientsApplied, useStoreCustomRules, useStoreKeycloak, useStoreSettings, useStoreTasks} from "../store";
+import {
+    useStoreClients,
+    useStoreClientsApplied,
+    useStoreCustomRules,
+    useStoreKeycloak,
+    useStoreSettings,
+    useStoreTasks
+} from "../store";
 
 const WebsocketComponent = () => {
     const setClients = useStoreClients(state => state.setClients);

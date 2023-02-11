@@ -1,4 +1,15 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, FormControl, Select, InputLabel, MenuItem} from "@mui/material";
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControl,
+    InputLabel,
+    MenuItem,
+    Select,
+    TextField
+} from "@mui/material";
 import React, {useRef, useState} from "react";
 import {useStoreDialogs} from "../store";
 import {Controller, useForm} from "react-hook-form";

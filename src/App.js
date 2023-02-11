@@ -18,7 +18,7 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import {Devices, ImportantDevices, Logout, Memory, Reviews, Settings, LocalFireDepartment} from "@mui/icons-material";
+import {Devices, ImportantDevices, LocalFireDepartment, Logout, Memory, Reviews, Settings} from "@mui/icons-material";
 import ClientsComponent from "./components/ClientsComponent";
 import {useStoreClients, useStoreDialogs, useStoreKeycloak, useStoreSettings, useStoreTasks} from "./store";
 import DialogsComponent from "./components/DialogsComponent";

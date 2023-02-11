@@ -1,14 +1,7 @@
 import React from "react";
-import {
-    IconButton,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemText,
-    Tooltip
-} from "@mui/material";
+import {IconButton, List, ListItem, ListItemButton, ListItemText, Tooltip} from "@mui/material";
 import {Delete, Edit} from "@mui/icons-material";
-import {useStoreApi, useStoreDialogs, useStoreCustomRules} from "../store";
+import {useStoreApi, useStoreDialogs} from "../store";
 
 const CustomRuleComponent = (props) => {
     const openCustomRuleDialog = useStoreDialogs(state => state.openCustomRuleDialog);

@@ -1,8 +1,20 @@
-import {Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField, List, ListItem, ListSubheader, Typography} from "@mui/material";
+import {
+    Button,
+    Checkbox,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    FormControlLabel,
+    List,
+    ListItem,
+    ListSubheader,
+    TextField,
+    Typography
+} from "@mui/material";
 import {useRef} from "react";
 import {useStoreApi, useStoreDialogs, useStoreSettings} from "../store";
 import {Controller, useForm} from "react-hook-form";
-import MultiChipInputComponent from "./MultiChipInputComponent";
 
 const SettingsDialog = () => {
     const open = useStoreDialogs(state => state.open);
@@ -32,7 +44,7 @@ const SettingsDialog = () => {
                 <DialogTitle id="alert-dialog-title">
                     Edit settings
                 </DialogTitle>
-                <DialogContent 
+                <DialogContent
                     dividers
                     sx={{paddingX: "8px"}}
                 >

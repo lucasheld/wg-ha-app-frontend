@@ -1,12 +1,12 @@
 import React from "react";
 import {useStoreApi, useStoreCustomRules, useStoreDialogs} from "../store";
-import {Alert, List, Paper, Tooltip, Fab} from "@mui/material";
+import {Alert, Fab, List, Paper, Tooltip} from "@mui/material";
 import CustomRuleComponent from "./CustomRuleComponent";
 import {Add} from "@mui/icons-material";
 
 const CustomRulesComponent = () => {
     const customRules = useStoreCustomRules(state => state.customRules);
-    
+
     const openCustomRuleDialog = useStoreDialogs(state => state.openCustomRuleDialog);
 
     const addCustomRule = useStoreApi(state => state.addCustomRule);
@@ -32,7 +32,7 @@ const CustomRulesComponent = () => {
                         </List>
                     </Paper>
             }
-            
+
             <Tooltip title="Add custom rule">
                 <Fab
                     color="primary"
