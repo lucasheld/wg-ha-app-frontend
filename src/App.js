@@ -18,7 +18,16 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import {Devices, ImportantDevices, LocalFireDepartment, Logout, Memory, Reviews, Settings} from "@mui/icons-material";
+import {
+    Devices,
+    Hub,
+    ImportantDevices,
+    LocalFireDepartment,
+    Logout,
+    Memory,
+    Reviews,
+    Settings
+} from "@mui/icons-material";
 import ClientsComponent from "./components/ClientsComponent";
 import {useStoreClients, useStoreDialogs, useStoreKeycloak, useStoreSettings, useStoreTasks} from "./store";
 import DialogsComponent from "./components/DialogsComponent";
@@ -27,6 +36,7 @@ import KeycloakComponent from "./components/KeycloakComponent";
 import SnackbarComponent from "./components/SnackbarComponent";
 import ReviewsComponent from "./components/ReviewsComponent";
 import CustomRulesComponent from "./components/CustomRulesComponent";
+import NetworkComponent from "./components/NetworkComponent";
 
 const App = () => {
     const token = useStoreKeycloak(state => state.token);
@@ -193,6 +203,19 @@ const App = () => {
                                                     <LocalFireDepartment/>
                                                 </ListItemIcon>
                                                 <ListItemText primary="Custom Rules"/>
+                                            </ListItemButton>
+                                        </ListItem>
+                                    }
+                                    {
+                                        roles.includes("app-admin") &&
+                                        <ListItem key="network" disablePadding>
+                                            <ListItemButton
+                                                onClick={() => setDisplayComponent(<NetworkComponent/>)}
+                                            >
+                                                <ListItemIcon>
+                                                    <Hub/>
+                                                </ListItemIcon>
+                                                <ListItemText primary="Network"/>
                                             </ListItemButton>
                                         </ListItem>
                                     }
