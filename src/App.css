@@ -40,7 +40,3 @@
 .react-flow__handle {
     opacity: 0;
 }
-
-.react-flow__edge.selected {
-    font-weight: bold;
-}

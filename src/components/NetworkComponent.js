@@ -1,5 +1,16 @@
 import React, {useCallback} from "react";
-import ReactFlow, {addEdge, Background, Controls, MarkerType, useEdgesState, useNodesState} from "reactflow";
+import ReactFlow, {
+    addEdge,
+    Background,
+    BaseEdge,
+    Controls,
+    EdgeLabelRenderer,
+    EdgeTypes,
+    getBezierPath,
+    MarkerType,
+    useEdgesState,
+    useNodesState
+} from "reactflow";
 import ELK from "elkjs";
 import Address from "ipaddr.js";
 
@@ -32,6 +43,38 @@ const elkLayout = (nodes, edges) => {
     return elk.layout(graph);
 };
 
+const CustomEdge = (props) => {
+    const [path, labelX, labelY] = getBezierPath(props);
+
+    return (
+        <>
+            <BaseEdge path={path} labelX={labelX} labelY={labelY} {...props} />
+            <EdgeLabelRenderer>
+                <div
+                    style={{
+                        position: 'absolute',
+                        transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
+                        background: 'white',
+                        padding: 10,
+                        borderRadius: 5,
+                        fontSize: 12,
+                        fontWeight: props.selected ? "bold" : "unset",
+                        pointerEvents: "all",
+                        zIndex: props.selected ? 1000 : "unset",
+                        whiteSpace: "pre-line"
+                    }}
+                    className="nodrag nopan"
+                >
+                    {props.data.text}
+                </div>
+            </EdgeLabelRenderer>
+        </>
+    );
+};
+
+const edgeTypes: EdgeTypes = {
+    custom: CustomEdge,
+};
 
 const NetworkComponent = () => {
     const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
@@ -176,7 +219,7 @@ const NetworkComponent = () => {
             let label = "";
             labels.forEach((l, index) => {
                 if (index !== 0) {
-                    label += " | ";
+                    label += "\n";
                 }
                 label += `${l.protocol}${l.port ? ` ${l.port}` : ""}`
             })
@@ -194,7 +237,10 @@ const NetworkComponent = () => {
                 style: {
                     strokeWidth: 2
                 },
-                label: label
+                data: {
+                    text: label
+                },
+                type: 'custom'
             })
         })
     }
@@ -274,7 +320,7 @@ const NetworkComponent = () => {
             let edgeMerged = edges[0]
             edges.forEach((edge, index) => {
                 if (index !== 0) {
-                    label += " | ";
+                    label += "\n";
                 }
                 label += edge.label;
             })
@@ -306,11 +352,14 @@ const NetworkComponent = () => {
                 id: `client-${edge.src}-client-${edge.dst}`,
                 source: `client-${edge.src}`,
                 target: `client-${edge.dst}`,
-                label: edge.label,
+                data: {
+                    text: edge.label,
+                },
                 style: {
                     ...newEdge.style,
                     strokeWidth: 2
-                }
+                },
+                type: 'custom'
             })
         })
     }
@@ -343,6 +392,7 @@ const NetworkComponent = () => {
                 onConnect={onConnect}
                 fitView
                 elevateEdgesOnSelect
+                edgeTypes={edgeTypes}
             >
                 <Controls />
                 <Background />
