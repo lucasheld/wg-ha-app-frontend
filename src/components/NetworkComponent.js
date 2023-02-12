@@ -61,7 +61,8 @@ const CustomEdge = (props) => {
                         fontWeight: props.selected ? "bold" : "unset",
                         pointerEvents: "all",
                         zIndex: props.selected ? 1000 : "unset",
-                        whiteSpace: "pre-line"
+                        whiteSpace: "pre-line",
+                        textAlign: "center"
                     }}
                     className="nodrag nopan"
                 >
