@@ -130,25 +130,12 @@ const NetworkComponent = () => {
         return addr.kind();
     }
 
-    const groupBy = (list, keyGetter) => {
-        const map = new Map();
-        list.forEach((item) => {
-            const key = keyGetter(item);
-            const collection = map.get(key);
-            if (!collection) {
-                map.set(key, [item]);
-            } else {
-                collection.push(item);
-            }
-        });
-        return map;
-    }
-
     const removeDuplicates = arr => {
         return Array.from(new Set(arr.map(JSON.stringify))).map(JSON.parse);
     };
 
     const generateClientsNodesEdges = (newNodes, newEdges) => {
+        // add node for each client
         clients.forEach(client => {
             newNodes.push({
                 id: `client-${client.id}`,
@@ -162,7 +149,7 @@ const NetworkComponent = () => {
             });
         });
 
-        // generate edges
+        // generate rules for client services based on tags and allowed_tags
         let rules = []
         clients.forEach(peer => {
             peer.tags.forEach(tag => {
@@ -204,12 +191,21 @@ const NetworkComponent = () => {
             })
         })
 
-        let groupedRules = groupBy(rules, rule => `client-${rule.src.id}-client-${rule.dst.id}`);
-        groupedRules = Array.from(groupedRules);
+        // group rules by src and dst
+        let rulesMap = {};
+        rules.forEach(rule => {
+            let key = [rule.src.id, rule.dst.id].sort().join();
+            if (!Object.keys(rulesMap).includes(key)) {
+                rulesMap[key] = [];
+            }
+            rulesMap[key].push(rule);
+        })
+        let groupedRules = Object.values(rulesMap);
 
         groupedRules.forEach(groupedRule => {
+            // build label by merging labels with same src and dst and remove duplicates
             let labels = [];
-            groupedRule[1].forEach(rule => {
+            groupedRule.forEach(rule => {
                 labels.push({
                     protocol: rule.protocol,
                     port: rule.port
@@ -224,8 +220,8 @@ const NetworkComponent = () => {
                 label += `${l.protocol}${l.port ? ` ${l.port}` : ""}`
             })
 
-            let rule = groupedRule[1][0];
-
+            // add edge for the rule
+            let rule = groupedRule[0];
             newEdges.push({
                 id: `client-${rule.src.id}-client-${rule.dst.id}`,
                 source: `client-${rule.src.id}`,
