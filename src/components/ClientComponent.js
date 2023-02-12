@@ -1,15 +1,6 @@
 import React from "react";
-import {
-    CircularProgress,
-    IconButton,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    Tooltip
-} from "@mui/material";
-import {Close, Delete, Done, Edit} from "@mui/icons-material";
+import {IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Tooltip} from "@mui/material";
+import {Autorenew, Close, Delete, Done, Edit} from "@mui/icons-material";
 import {useStoreApi, useStoreClients, useStoreClientsApplied, useStoreDialogs, useStoreKeycloak} from "../store";
 import {userNameById} from "../utils";
 
@@ -120,7 +111,7 @@ const ClientComponent = (props) => {
                                         <Tooltip
                                             title={`${props.client.permitted === "PENDING" ? "Client review pending" : "Client is being configured"}`}
                                         >
-                                            <CircularProgress size={24}/>
+                                            <Autorenew/>
                                         </Tooltip>
                             }
                         </ListItemIcon>
