@@ -56,6 +56,20 @@ const ClientDialog = () => {
 
     const formRef = useRef(null);
 
+    const getClientAllowedIpsHost = () => {
+        if (props.client?.allowed_ips) {
+            let ipWithoutSubnetMask = props.client.allowed_ips[0].split("/")[0];
+            let ipParts = ipWithoutSubnetMask.split('.', -1);
+            if (!ipParts) {
+                ipParts = ipWithoutSubnetMask.split(':', -1);
+            }
+            return ipParts[ipParts.length-1];
+        }
+        return "X";
+    }
+
+    const allowedIpsHost = getClientAllowedIpsHost();
+
     return (
         <Dialog
             open={open}
@@ -146,7 +160,7 @@ const ClientDialog = () => {
                                     type="text"
                                     fullWidth
                                     disabled
-                                    value=".X"
+                                    value={`.${allowedIpsHost}`}
                                 />
                             </Grid>
                         </Grid>
@@ -188,7 +202,7 @@ const ClientDialog = () => {
                                     type="text"
                                     fullWidth
                                     disabled
-                                    value=":X"
+                                    value={`.${allowedIpsHost}`}
                                 />
                             </Grid>
                         </Grid>
